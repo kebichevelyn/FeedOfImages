@@ -22,7 +22,7 @@
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
-                        <color key="backgroundColor" name="YP Black (iOS)"/>
+                        <color key="backgroundColor" name="launchscreen + 1 screen"/>
                         <constraints>
                             <constraint firstItem="LbY-vW-Go7" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="ABA-U6-rny"/>
                             <constraint firstItem="LbY-vW-Go7" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="d0s-3o-zfi"/>
@@ -36,8 +36,8 @@
     </scenes>
     <resources>
         <image name="splash_screen_logo" width="72.666664123535156" height="75.333335876464844"/>
-        <namedColor name="YP Black (iOS)">
-            <color red="0.10196078431372549" green="0.10588235294117647" blue="0.13333333333333333" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+        <namedColor name="launchscreen + 1 screen">
+            <color red="0.10196078431372549" green="0.10588235294117647" blue="0.13333333333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
 </document>
