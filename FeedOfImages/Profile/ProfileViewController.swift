@@ -19,7 +19,7 @@ final class ProfileViewController: UIViewController {
     
     private func addViewsToScreen() {
         
-        let avatarImage = UIImageView(image: UIImage(named: "avatar"))
+        let avatarImage = UIImageView(image: UIImage(resource: .avatar))
         let nameLabel = UILabel()
         let loginName = UILabel()
         let descriptionLabel = UILabel()
@@ -85,7 +85,7 @@ final class ProfileViewController: UIViewController {
         ])
     }
     
-    @objc func didTapLogoutButton () {
+    @objc private func didTapLogoutButton () {
         
         for view in profileInformation {
             view.removeFromSuperview()
@@ -109,9 +109,9 @@ final class ProfileViewController: UIViewController {
             emptyAvatar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 32),
             
             logoutButton.centerYAnchor.constraint(equalTo: emptyAvatar.centerYAnchor)
-            ])
+        ])
     }
 }
 
-    
-   
+
+

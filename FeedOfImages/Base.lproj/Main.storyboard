@@ -128,7 +128,7 @@
                             <constraint firstAttribute="bottom" secondItem="cnq-mt-15m" secondAttribute="bottom" id="xy0-OK-A49"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Item" image="tab_editorial_active" id="L41-j1-D3N"/>
+                    <tabBarItem key="tabBarItem" title="" image="tab_editorial_active" id="L41-j1-D3N"/>
                     <navigationItem key="navigationItem" id="0hW-1b-Yhh"/>
                     <connections>
                         <outlet property="tableView" destination="cnq-mt-15m" id="HDr-TQ-md2"/>
@@ -162,10 +162,10 @@
                                 </connections>
                             </scrollView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nv4-VJ-Of3">
-                                <rect key="frame" x="172.66666666666666" y="753" width="48" height="48"/>
+                                <rect key="frame" x="171" y="717" width="51" height="51"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="48" id="ISU-Xp-aIH"/>
-                                    <constraint firstAttribute="height" constant="48" id="OgH-NG-2DE"/>
+                                    <constraint firstAttribute="width" constant="51" id="ISU-Xp-aIH"/>
+                                    <constraint firstAttribute="height" constant="51" id="OgH-NG-2DE"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
@@ -174,14 +174,16 @@
                                     <action selector="didTapShareButton:" destination="wIv-mW-zRm" eventType="touchUpInside" id="6g2-Hq-ZO9"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1PP-Hv-bfA">
-                                <rect key="frame" x="8" y="67" width="50" height="50"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1PP-Hv-bfA">
+                                <rect key="frame" x="8" y="68" width="48" height="48"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="CiJ-ih-gKV"/>
-                                    <constraint firstAttribute="width" constant="50" id="uue-LZ-hmC"/>
+                                    <constraint firstAttribute="height" constant="48" id="CiJ-ih-gKV"/>
+                                    <constraint firstAttribute="width" constant="48" id="uue-LZ-hmC"/>
                                 </constraints>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                <state key="normal" image="nav_back_button_white"/>
+                                <state key="normal" image="nav_back_button_white">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
                                 <connections>
                                     <action selector="didTapBackButton:" destination="wIv-mW-zRm" eventType="touchUpInside" id="zSj-Wv-oGO"/>
                                 </connections>
@@ -190,12 +192,12 @@
                         <viewLayoutGuide key="safeArea" id="lIG-yy-Nhg"/>
                         <color key="backgroundColor" name="launchscreen + 1 screen"/>
                         <constraints>
-                            <constraint firstItem="1PP-Hv-bfA" firstAttribute="top" secondItem="lIG-yy-Nhg" secondAttribute="top" constant="8" id="2YQ-r4-8MB"/>
+                            <constraint firstItem="1PP-Hv-bfA" firstAttribute="top" secondItem="lIG-yy-Nhg" secondAttribute="top" constant="9" id="2YQ-r4-8MB"/>
                             <constraint firstItem="nv4-VJ-Of3" firstAttribute="centerX" secondItem="lIG-yy-Nhg" secondAttribute="centerX" id="6u6-c9-jLU"/>
                             <constraint firstItem="28Y-5i-hq4" firstAttribute="leading" secondItem="lIG-yy-Nhg" secondAttribute="leading" id="WH5-Bh-h6h"/>
                             <constraint firstItem="1PP-Hv-bfA" firstAttribute="leading" secondItem="lIG-yy-Nhg" secondAttribute="leading" constant="8" id="ZWt-ZW-y4d"/>
                             <constraint firstItem="lIG-yy-Nhg" firstAttribute="trailing" secondItem="28Y-5i-hq4" secondAttribute="trailing" id="c4k-lF-QNP"/>
-                            <constraint firstItem="lIG-yy-Nhg" firstAttribute="bottom" secondItem="nv4-VJ-Of3" secondAttribute="bottom" constant="17" id="keO-ip-rbH"/>
+                            <constraint firstItem="lIG-yy-Nhg" firstAttribute="bottom" secondItem="nv4-VJ-Of3" secondAttribute="bottom" constant="50" id="keO-ip-rbH"/>
                             <constraint firstItem="28Y-5i-hq4" firstAttribute="top" secondItem="fRq-B3-LzY" secondAttribute="top" id="nDX-8Z-c4A"/>
                             <constraint firstAttribute="bottom" secondItem="28Y-5i-hq4" secondAttribute="bottom" id="vSn-vq-X6x"/>
                         </constraints>
