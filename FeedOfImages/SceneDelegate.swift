@@ -1,9 +1,4 @@
-//
-//  SceneDelegate.swift
-//  FeedOfImages
-//
-//  Created by Evelina Kebich on 10.08.25.
-//
+
 
 import UIKit
 
