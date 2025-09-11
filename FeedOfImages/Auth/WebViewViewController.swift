@@ -12,11 +12,14 @@ protocol WebViewViewControllerDelegate: AnyObject {
 
 final class WebViewViewController: UIViewController {
     
+    //MARK: - IBOutlets
     @IBOutlet private var webView: WKWebView!
     @IBOutlet private var progressView: UIProgressView!
     
     weak var delegate: WebViewViewControllerDelegate?
 
+    
+    //MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -89,12 +92,27 @@ extension WebViewViewController: WKNavigationDelegate {
         decisionHandler: @escaping (WKNavigationActionPolicy) -> Void
     ) {
         if let code = code(from: navigationAction) {
+            
+            fetchOAuthToken(with: code)
+            
             delegate?.webViewViewController(self, didAuthenticateWithCode: code)
             decisionHandler(.cancel)
         } else {
             decisionHandler(.allow)
         }
     }
+    
+    private func fetchOAuthToken(with code: String) {
+            OAuth2Service.shared.fetchOAuthToken(code) { result in
+                switch result {
+                case .success(let token):
+                    print("🎉 Токен: \(token)")
+                    
+                case .failure(let error):
+                    print("❌ ОШИБКА получения токена: \(error.localizedDescription)")
+                }
+            }
+        }
 
     private func code(from navigationAction: WKNavigationAction) -> String? {
         if
