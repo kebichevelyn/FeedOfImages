@@ -106,10 +106,10 @@ extension WebViewViewController: WKNavigationDelegate {
             OAuth2Service.shared.fetchOAuthToken(code) { result in
                 switch result {
                 case .success(let token):
-                    print("🎉 Токен: \(token)")
+                    print("токен: \(token)")
                     
                 case .failure(let error):
-                    print("❌ ОШИБКА получения токена: \(error.localizedDescription)")
+                    print("ошибка получения токена: \(error.localizedDescription)")
                 }
             }
         }
