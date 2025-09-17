@@ -10,9 +10,10 @@ final class SplashViewController: UIViewController {
         super.viewDidAppear(animated)
         
         if storage.token != nil {
+            print("Token exists, switching to TabBarController")
             switchToTabBarController()
         } else {
-            // Show Auth Screen
+            print("Token not found, performing segue to authentication screen")
             performSegue(withIdentifier: showAuthenticationScreenSegueIdentifier, sender: nil)
         }
     }
@@ -24,6 +25,10 @@ final class SplashViewController: UIViewController {
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         .lightContent
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
     }
     
     private func switchToTabBarController() {
