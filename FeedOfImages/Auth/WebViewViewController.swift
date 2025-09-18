@@ -93,8 +93,6 @@ extension WebViewViewController: WKNavigationDelegate {
     ) {
         if let code = code(from: navigationAction) {
             
-            //fetchOAuthToken(with: code)
-            
             delegate?.webViewViewController(self, didAuthenticateWithCode: code)
             decisionHandler(.cancel)
         } else {
@@ -102,18 +100,6 @@ extension WebViewViewController: WKNavigationDelegate {
         }
     }
     
-    //private func fetchOAuthToken(with code: String) {
-           // OAuth2Service.shared.fetchOAuthToken(code) { result in
-               // switch result {
-                //case .success(let token):
-                  //  print("токен: \(token)")
-                    
-                //case .failure(let error):
-                   // print("ошибка получения токена: \(error.localizedDescription)")
-                //}
-           // }
-        //}
-
     private func code(from navigationAction: WKNavigationAction) -> String? {
         if
             let url = navigationAction.request.url,
