@@ -7,12 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A8781C1B2E7144AF009C47F6 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A8781C1A2E7144AF009C47F6 /* WebKit.framework */; };
+		A899E9232E83175C00174366 /* ProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = A899E9222E83175C00174366 /* ProgressHUD */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		A80B1C3D2E48817900CF9641 /* FeedOfImages.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FeedOfImages.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		A8781C1A2E7144AF009C47F6 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -41,7 +40,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A8781C1B2E7144AF009C47F6 /* WebKit.framework in Frameworks */,
+				A899E9232E83175C00174366 /* ProgressHUD in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -52,7 +51,6 @@
 			isa = PBXGroup;
 			children = (
 				A80B1C3F2E48817900CF9641 /* FeedOfImages */,
-				A8781C192E7144AF009C47F6 /* Frameworks */,
 				A80B1C3E2E48817900CF9641 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -63,14 +61,6 @@
 				A80B1C3D2E48817900CF9641 /* FeedOfImages.app */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		A8781C192E7144AF009C47F6 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				A8781C1A2E7144AF009C47F6 /* WebKit.framework */,
-			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -93,6 +83,7 @@
 			);
 			name = FeedOfImages;
 			packageProductDependencies = (
+				A899E9222E83175C00174366 /* ProgressHUD */,
 			);
 			productName = FeedOfImages;
 			productReference = A80B1C3D2E48817900CF9641 /* FeedOfImages.app */;
@@ -122,6 +113,9 @@
 			);
 			mainGroup = A80B1C342E48817900CF9641;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				A899E9212E83175C00174366 /* XCRemoteSwiftPackageReference "ProgressHUD" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = A80B1C3E2E48817900CF9641 /* Products */;
 			projectDirPath = "";
@@ -356,6 +350,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		A899E9212E83175C00174366 /* XCRemoteSwiftPackageReference "ProgressHUD" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/relatedcode/ProgressHUD";
+			requirement = {
+				kind = exactVersion;
+				version = 14.1.4;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		A899E9222E83175C00174366 /* ProgressHUD */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A899E9212E83175C00174366 /* XCRemoteSwiftPackageReference "ProgressHUD" */;
+			productName = ProgressHUD;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = A80B1C352E48817900CF9641 /* Project object */;
 }
