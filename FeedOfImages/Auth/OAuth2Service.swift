@@ -12,7 +12,6 @@ final class OAuth2Service {
     private let urlSession = URLSession.shared
 
     private var task: URLSessionTask?
-
     private var lastCode: String?
 
     private(set) var authToken: String? {
@@ -28,66 +27,47 @@ final class OAuth2Service {
 
     func fetchOAuthToken(_ code: String, completion: @escaping (Result<String, Error>) -> Void) {
         assert(Thread.isMainThread)
-        guard lastCode != code else {
-            completion(.failure(AuthServiceError.invalidRequest))
-            return
+        
+        // Проверка на повторный запрос с тем же кодом
+        if task != nil {
+            if lastCode != code {
+                task?.cancel()
+            } else {
+                completion(.failure(AuthServiceError.invalidRequest))
+                return
+            }
+        } else {
+            if lastCode == code {
+                completion(.failure(AuthServiceError.invalidRequest))
+                return
+            }
         }
-
-        task?.cancel()
+        
         lastCode = code
-        guard
-            let request = makeOAuthTokenRequest(code: code)
-        else {
+        
+        guard let request = makeOAuthTokenRequest(code: code) else {
             completion(.failure(AuthServiceError.invalidRequest))
             return
         }
 
-        let task = urlSession.dataTask(with: request) { [weak self] data, response, error in
+        // Используем существующий метод object(for:completion:)
+        let task = object(for: request) { [weak self] (result: Result<OAuthTokenResponseBody, Error>) in
             DispatchQueue.main.async {
-                let task = URLSession.shared.dataTask(with: request) { data, response, error in
-                    if let error = error {
-                        print("Ошибка сети: \(error.localizedDescription)")
-                        DispatchQueue.main.async {
-                            completion(.failure(error))
-                        }
-                        return
-                    }
-                    
-                    guard let data = data else {
-                        print("Нет данных в ответе")
-                        DispatchQueue.main.async {
-                            completion(.failure(NSError(domain: "Нет данных", code: 0)))
-                        }
-                        return
-                    }
-                    
-                    do {
-                        if let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
-                           let token = json["access_token"] as? String {
-                            print("Токен получен: \(token)")
-                            OAuth2TokenStorage.shared.token = token
-                            DispatchQueue.main.async {
-                                completion(.success(token))
-                            }
-                        } else {
-                            print("В ответе нет токена")
-                            DispatchQueue.main.async {
-                                completion(.failure(NSError(domain: "Нет токена", code: 0)))
-                            }
-                        }
-                    } catch {
-                        print("Ошибка чтения JSON: \(error)")
-                        DispatchQueue.main.async {
-                            completion(.failure(error))
-                        }
-                    }
+                switch result {
+                case .success(let responseBody):
+                    let token = responseBody.accessToken
+                    self?.authToken = token
+                    completion(.success(token))
+                case .failure(let error):
+                    completion(.failure(error))
                 }
-                task.resume()
-
+                
+                // Очищаем состояние после завершения
                 self?.task = nil
                 self?.lastCode = nil
             }
         }
+        
         self.task = task
         task.resume()
     }
@@ -129,24 +109,31 @@ final class OAuth2Service {
 // MARK: - Network Client
 
 extension OAuth2Service {
-    private func object(for request: URLRequest, completion: @escaping (Result<OAuthTokenResponseBody, Error>) -> Void) -> URLSessionTask {
+    private func object<T: Decodable>(
+        for request: URLRequest,
+        completion: @escaping (Result<T, Error>) -> Void
+    ) -> URLSessionTask {
         let decoder = JSONDecoder()
-        return urlSession.data(for: request) { (result: Result<Data, Error>) in
-            switch result {
-            case .success(let data):
-                do {
-                    let body = try decoder.decode(OAuthTokenResponseBody.self, from: data)
-                    completion(.success(body))
-                }
-                catch {
-                    completion(.failure(NetworkError.decodingError(error)))
-                }
-                
-            case .failure(let error):
-                completion(.failure(error))
+        
+        let task = urlSession.dataTask(with: request) { data, response, error in
+            if let error = error {
+                completion(.failure(error)) // Просто передаем ошибку как есть
+                return
+            }
+            
+            guard let data = data else {
+                completion(.failure(NSError(domain: "No data received", code: 0)))
+                return
+            }
+            
+            do {
+                let decodedObject = try decoder.decode(T.self, from: data)
+                completion(.success(decodedObject))
+            } catch {
+                completion(.failure(error)) // Просто передаем ошибку декодирования
             }
         }
+        
+        return task
     }
 }
-
-
