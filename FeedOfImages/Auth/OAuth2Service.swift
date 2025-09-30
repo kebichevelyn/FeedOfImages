@@ -1,4 +1,5 @@
 import Foundation
+import WebKit
 
 enum AuthServiceError: Error {
     case invalidRequest

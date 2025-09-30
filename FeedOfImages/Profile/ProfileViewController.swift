@@ -1,5 +1,6 @@
 import Foundation
 import UIKit
+import WebKit
 
 final class ProfileViewController: UIViewController {
     private var nameLabel: UILabel?
@@ -13,9 +14,19 @@ final class ProfileViewController: UIViewController {
         super.viewDidLoad()
         
         addViewsToScreen()
+        
+        if let profile = ProfileService.shared.profile {
+            updateProfileDetails(profile: profile)
+        }
     }
     
     // MARK: - private functions
+    
+    private func updateProfileDetails(profile: Profile) {
+        nameLabel?.text = profile.name
+        loginName?.text = profile.loginName
+        descriptionLabel?.text = profile.bio
+    }
     
     private func addViewsToScreen() {
         

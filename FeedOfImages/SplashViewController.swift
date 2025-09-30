@@ -4,19 +4,20 @@ import WebKit
 final class SplashViewController: UIViewController {
     private let showAuthenticationScreenSegueIdentifier = "ShowAuthenticationScreen"
     
+    private let profileService = ProfileService.shared
     private let storage = OAuth2TokenStorage.shared
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        if storage.token != nil {
-            print("Token exists, switching to TabBarController")
-            switchToTabBarController()
-        } else {
-            print("Token not found, performing segue to authentication screen")
-            performSegue(withIdentifier: showAuthenticationScreenSegueIdentifier, sender: nil)
-        }
-    }
+        if let token = storage.token {
+                    print("Token exists, fetching profile and switching to TabBarController")
+                    fetchProfile(token: token)
+                } else {
+                    print("Token not found, performing segue to authentication screen")
+                    performSegue(withIdentifier: showAuthenticationScreenSegueIdentifier, sender: nil)
+                }
+            }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -41,6 +42,24 @@ final class SplashViewController: UIViewController {
             .instantiateViewController(withIdentifier: "TabBarViewController")
         window.rootViewController = tabBarController
     }
+    
+    private func fetchProfile(token: String) {
+        UIBlockingProgressHUD.show()
+        profileService.fetchProfile(token) { [weak self] result in
+            UIBlockingProgressHUD.dismiss()
+
+            guard let self = self else { return }
+
+            switch result {
+            case .success:
+                self.switchToTabBarController()
+
+            case let .failure(error):
+                print(error)
+                break
+            }
+        }
+    }
 }
 
 extension SplashViewController {
@@ -64,7 +83,13 @@ extension SplashViewController: AuthViewControllerDelegate {
     func didAuthenticate(_ vc: AuthViewController) {
         vc.dismiss(animated: true)
         
-        switchToTabBarController()
+        // После успешной авторизации получаем токен и загружаем профиль
+        guard let token = storage.token else {
+            print("Token is nil after authentication")
+            return
+        }
+        
+        fetchProfile(token: token)
     }
 }
 

@@ -1,7 +1,5 @@
 import Foundation
 
-import Foundation
-
 // Декодируем ответ от сервера в формате JSON
 struct OAuthTokenResponseBody: Decodable {
     
