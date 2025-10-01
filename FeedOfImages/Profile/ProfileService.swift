@@ -46,15 +46,20 @@ final class ProfileService {
 
                     let profile = Profile(
                         username: profileResult.username,
-                        name: profileResult.firstName,
+                        name: "\(profileResult.firstName) \(profileResult.lastName)",
                         loginName: "@\(profileResult.username)",
                         bio: profileResult.bio
                     )
+                    
+                    // Сохраняем профиль в свойство
+                    self?.profile = profile
                     completion(.success(profile))
                 } catch {
+                    print("Ошибка декодирования профиля: \(error)")
                     completion(.failure(error))
                 }
             case .failure(let error):
+                print("Ошибка сети при загрузке профиля: \(error)")
                 completion(.failure(error))
             }
             self?.task = nil
@@ -74,5 +79,8 @@ final class ProfileService {
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         return request
     }
+    
+    func clearProfile() {
+        profile = nil
+    }
 }
-
