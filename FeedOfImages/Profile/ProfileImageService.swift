@@ -24,6 +24,8 @@ final class ProfileImageService {
     // Синглтон
     static let shared = ProfileImageService()
     private init() {}
+    
+    static let didChangeNotification = Notification.Name(rawValue: "ProfileImageProviderDidChange")
 
     // Приватное свойство для хранения URL аватарки
     private(set) var avatarURL: String?
@@ -54,6 +56,11 @@ final class ProfileImageService {
 
                     self.avatarURL = userResult.profileImage.small
                     completion(.success(userResult.profileImage.small))
+                    NotificationCenter.default
+                        .post(
+                            name: ProfileImageService.didChangeNotification,
+                            object: self,
+                            userInfo: ["URL": userResult.profileImage.small])
                 } catch {
                     print(error)
                 }
