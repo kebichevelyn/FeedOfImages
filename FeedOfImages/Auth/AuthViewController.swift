@@ -1,6 +1,5 @@
 import UIKit
 import WebKit
-import ProgressHUD
 
 protocol AuthViewControllerDelegate: AnyObject {
     func didAuthenticate(_ vc: AuthViewController)
@@ -10,6 +9,7 @@ final class AuthViewController: UIViewController {
     private let showWebViewSegueIdentifier = "ShowWebView"
     private let oauth2Service = OAuth2Service.shared
     private let storage = OAuth2TokenStorage.shared
+    private var isAuthenticating = false
     
     weak var delegate: AuthViewControllerDelegate?
     
@@ -21,6 +21,11 @@ final class AuthViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == showWebViewSegueIdentifier {
+            
+            guard !isAuthenticating else {
+                return
+            }
+            
             guard
                 let webViewViewController = segue.destination as? WebViewViewController
             else {
@@ -43,30 +48,32 @@ final class AuthViewController: UIViewController {
 
 extension AuthViewController: WebViewViewControllerDelegate {
     func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String) {
-
-        // Скрываем WebViewViewController
+        
+        isAuthenticating = true
+        
         vc.dismiss(animated: true)
 
-        // Показываем индикатор загрузки
-        ProgressHUD.animate()
+        UIBlockingProgressHUD.show()
 
         fetchOAuthToken(code) { [weak self] result in
-            // Скрываем индикатор загрузки
-            ProgressHUD.dismiss()
+    
+            UIBlockingProgressHUD.dismiss()
 
-            guard let self else { return }
+            guard let self = self else { return }
 
             switch result {
             case .success:
                 self.delegate?.didAuthenticate(self)
-            case .failure:
-                // TODO [Sprint 11] Добавьте обработку ошибки
-                break
+            case .failure(_):
+                
+                self.isAuthenticating = false
             }
         }
     }
 
     func webViewViewControllerDidCancel(_ vc: WebViewViewController) {
+        
+        isAuthenticating = false
         vc.dismiss(animated: true)
     }
 }
@@ -78,4 +85,3 @@ extension AuthViewController {
         }
     }
 }
-
