@@ -51,9 +51,11 @@ extension AuthViewController: WebViewViewControllerDelegate {
         
         isAuthenticating = true
         
-        vc.dismiss(animated: true)
+        //vc.dismiss(animated: true)
 
         UIBlockingProgressHUD.show()
+        
+        vc.dismiss(animated: true)
 
         fetchOAuthToken(code) { [weak self] result in
     
@@ -64,9 +66,9 @@ extension AuthViewController: WebViewViewControllerDelegate {
             switch result {
             case .success:
                 self.delegate?.didAuthenticate(self)
-            case .failure(_):
-                
+            case .failure:
                 self.isAuthenticating = false
+                self.showAuthErrorAlert() 
             }
         }
     }
@@ -83,5 +85,18 @@ extension AuthViewController {
         oauth2Service.fetchOAuthToken(code) { result in
             completion(result)
         }
+    }
+}
+
+extension AuthViewController {
+    func showAuthErrorAlert() {
+        let alertController = UIAlertController(
+            title: "Что-то пошло не так",
+            message: "Не удалось войти в систему",
+            preferredStyle: .alert
+        )
+        let okAction = UIAlertAction(title: "Ок", style: .default, handler: nil)
+        alertController.addAction(okAction)
+        present(alertController, animated: true, completion: nil)
     }
 }

@@ -11,13 +11,13 @@ final class SplashViewController: UIViewController {
         super.viewDidAppear(animated)
         
         if let token = storage.token {
-                    print("Token exists, fetching profile and switching to TabBarController")
-                    fetchProfile(token: token)
-                } else {
-                    print("Token not found, performing segue to authentication screen")
-                    performSegue(withIdentifier: showAuthenticationScreenSegueIdentifier, sender: nil)
-                }
-            }
+            print("Token exists, fetching profile and switching to TabBarController")
+            fetchProfile(token: token)
+        } else {
+            print("Token not found, performing segue to authentication screen")
+            performSegue(withIdentifier: showAuthenticationScreenSegueIdentifier, sender: nil)
+        }
+    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -52,14 +52,27 @@ final class SplashViewController: UIViewController {
 
             switch result {
             case let .success(profile):
-                ProfileImageService.shared.fetchProfileImageURL(username: profile.username) { _ in }
-                self.switchToTabBarController()
-
+                // ✅ ИСПРАВЛЕНО: ждем завершения загрузки аватарки перед переходом
+                self.fetchProfileImage(username: profile.username)
+                
             case let .failure(error):
-                print(error)
-                break
+                print("Failed to fetch profile: \(error)")
+                self.showAuthenticationScreen()
             }
         }
+    }
+    
+    private func fetchProfileImage(username: String) {
+        ProfileImageService.shared.fetchProfileImageURL(username: username) { [weak self] result in
+            // ✅ Переходим независимо от результата загрузки аватарки
+            self?.switchToTabBarController()
+        }
+    }
+    
+    private func showAuthenticationScreen() {
+        // Очищаем токен при ошибке загрузки профиля
+        storage.token = nil
+        performSegue(withIdentifier: showAuthenticationScreenSegueIdentifier, sender: nil)
     }
 }
 
@@ -93,4 +106,3 @@ extension SplashViewController: AuthViewControllerDelegate {
         fetchProfile(token: token)
     }
 }
-

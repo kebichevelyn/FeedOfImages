@@ -33,6 +33,7 @@ final class ProfileService {
         task?.cancel()
 
         guard let request = makeProfileRequest(token: token) else {
+            print("[fetchProfile]: Ошибка - неверный URL запроса")
             completion(.failure(URLError(.badURL)))
             return
         }
@@ -43,7 +44,7 @@ final class ProfileService {
                 let profile = Profile(
                     username: result.username,
                     name: "\(result.firstName) \(result.lastName)"
-                        .trimmingCharacters(in: .whitespaces), // Убираем лишние пробелы
+                        .trimmingCharacters(in: .whitespaces),
                     loginName: "@\(result.username)",
                     bio: result.bio
                 )
@@ -51,7 +52,7 @@ final class ProfileService {
                 self?.profile = profile
                 completion(.success(profile))
             case .failure(let error):
-                print("[fetchProfile]: Ошибка запроса: \(error.localizedDescription)")
+                print("[fetchProfile]: Ошибка запроса: \(error.localizedDescription)") 
                 completion(.failure(error))
             }
             self?.task = nil
