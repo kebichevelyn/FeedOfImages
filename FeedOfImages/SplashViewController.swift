@@ -52,7 +52,6 @@ final class SplashViewController: UIViewController {
 
             switch result {
             case let .success(profile):
-                // ✅ ИСПРАВЛЕНО: ждем завершения загрузки аватарки перед переходом
                 self.fetchProfileImage(username: profile.username)
                 
             case let .failure(error):
@@ -64,13 +63,11 @@ final class SplashViewController: UIViewController {
     
     private func fetchProfileImage(username: String) {
         ProfileImageService.shared.fetchProfileImageURL(username: username) { [weak self] result in
-            // ✅ Переходим независимо от результата загрузки аватарки
             self?.switchToTabBarController()
         }
     }
     
     private func showAuthenticationScreen() {
-        // Очищаем токен при ошибке загрузки профиля
         storage.token = nil
         performSegue(withIdentifier: showAuthenticationScreenSegueIdentifier, sender: nil)
     }
@@ -97,7 +94,6 @@ extension SplashViewController: AuthViewControllerDelegate {
     func didAuthenticate(_ vc: AuthViewController) {
         vc.dismiss(animated: true)
         
-        // После успешной авторизации получаем токен и загружаем профиль
         guard let token = storage.token else {
             print("Token is nil after authentication")
             return
