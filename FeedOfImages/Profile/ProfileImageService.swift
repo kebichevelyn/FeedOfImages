@@ -5,19 +5,19 @@ struct ProfileImage: Codable {
     let medium: String
     let large: String
 
-    private enum CodingKeys: String, CodingKey {
-        case small
-        case medium
-        case large
-    }
+    //private enum CodingKeys: String, CodingKey {
+        //case small
+        //case medium
+       // case large
+   // }
 }
 
 struct UserResult: Codable {
     let profileImage: ProfileImage
 
-    private enum CodingKeys: String, CodingKey {
-        case profileImage = "profile_image"
-    }
+    //private enum CodingKeys: String, CodingKey {
+       // case profileImage = "profile_image"
+    //}
 }
 
 final class ProfileImageService {
@@ -27,7 +27,7 @@ final class ProfileImageService {
     
     static let didChangeNotification = Notification.Name(rawValue: "ProfileImageProviderDidChange")
 
-    // Приватное свойство для хранения URL аватарки
+    
     private(set) var avatarURL: String?
 
     private var task: URLSessionTask?
