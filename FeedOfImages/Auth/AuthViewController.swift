@@ -13,6 +13,7 @@ final class AuthViewController: UIViewController {
     
     weak var delegate: AuthViewControllerDelegate?
     
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -68,7 +69,7 @@ extension AuthViewController: WebViewViewControllerDelegate {
                 self.delegate?.didAuthenticate(self)
             case .failure:
                 self.isAuthenticating = false
-                self.showAuthErrorAlert() 
+                showAlert(in: self)
             }
         }
     }
@@ -88,15 +89,8 @@ extension AuthViewController {
     }
 }
 
-extension AuthViewController {
-    func showAuthErrorAlert() {
-        let alertController = UIAlertController(
-            title: "Что-то пошло не так",
-            message: "Не удалось войти в систему",
-            preferredStyle: .alert
-        )
-        let okAction = UIAlertAction(title: "Ок", style: .default, handler: nil)
-        alertController.addAction(okAction)
-        present(alertController, animated: true, completion: nil)
-    }
+private func showAlert(in viewController: UIViewController) {
+    let alert = UIAlertController(title: "Что-то пошло не так(", message: "Не удалось войти в систему", preferredStyle: .alert)
+    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+    viewController.present(alert, animated: true, completion: nil)
 }

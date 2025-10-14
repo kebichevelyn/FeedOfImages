@@ -6,7 +6,7 @@ final class ProfileViewController: UIViewController {
     private var nameLabel: UILabel?
     private var loginName: UILabel?
     private var descriptionLabel: UILabel?
-    private var avatarImage: UIImageView!
+    private var avatarImage: UIImageView?
     private var logoutButton: UIButton?
     private var profileInformation: [UIView] = []
     
@@ -14,6 +14,8 @@ final class ProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        view.backgroundColor = UIColor(named: "launchscreen + 1 screen")
         
         addViewsToScreen()
         
