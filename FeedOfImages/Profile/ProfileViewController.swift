@@ -22,20 +22,18 @@ final class ProfileViewController: UIViewController {
         }
         
         profileImageServiceObserver = NotificationCenter.default
-                    .addObserver(
-                        forName: ProfileImageService.didChangeNotification,
-                        object: nil,
-                        queue: .main
-                    ) { [weak self] _ in
-                        guard let self = self else { return }
-                        self.updateAvatar()
-                    }
-                updateAvatar()
+            .addObserver(
+                forName: ProfileImageService.didChangeNotification,
+                object: nil,
+                queue: .main
+            ) { [weak self] _ in
+                guard let self = self else { return }
+                self.updateAvatar()
+            }
+        updateAvatar()
     }
     
     // MARK: - private functions
-
-
     
     private func updateProfileDetails(profile: Profile) {
         nameLabel?.text = profile.name
@@ -46,7 +44,8 @@ final class ProfileViewController: UIViewController {
     private func updateAvatar() {
         guard
             let profileImageURL = ProfileImageService.shared.avatarURL,
-            let imageUrl = URL(string: profileImageURL)
+            let imageUrl = URL(string: profileImageURL),
+            let imageView = avatarImage
         else { return }
 
         print("imageUrl: \(imageUrl)")
@@ -55,49 +54,27 @@ final class ProfileViewController: UIViewController {
             .withTintColor(.lightGray, renderingMode: .alwaysOriginal)
             .withConfiguration(UIImage.SymbolConfiguration(pointSize: 70, weight: .regular, scale: .large))
 
-        let processor = RoundCornerImageProcessor(cornerRadius: 35) // Радиус для круга
-        avatarImage.kf.indicatorType = .activity
-        avatarImage.kf.setImage(
+        let processor = RoundCornerImageProcessor(cornerRadius: 35)
+        imageView.kf.indicatorType = .activity
+        imageView.kf.setImage(
             with: imageUrl,
             placeholder: placeholderImage,
             options: [
                 .processor(processor),
-                .scaleFactor(UIScreen.main.scale), // Учитываем масштаб экрана
-                .cacheOriginalImage, // Кэшируем оригинал
-                .forceRefresh // Игнорируем кэш, чтобы обновить
+                .scaleFactor(UIScreen.main.scale),
+                .cacheOriginalImage,
+                .forceRefresh
             ]) { result in
-
                 switch result {
-                    // Успешная загрузка
                 case .success(let value):
-                    // Картинка
                     print(value.image)
-
-                    // Откуда картинка загружена:
-                    // - .none — из сети.
-                    // - .memory — из кэша оперативной памяти.
-                    // - .disk — из дискового кэша.
                     print(value.cacheType)
-
-                    // Информация об источнике.
                     print(value.source)
-
-                    // В случае ошибки
                 case .failure(let error):
                     print(error)
                 }
             }
     }
-    
-    //private func updateAvatar() {
-           // guard
-                //let profileImageURL = ProfileImageService.shared.avatarURL,
-               // let url = URL(string: profileImageURL)
-           // else { return }
-            // TODO [Sprint 11] Обновить аватар, используя Kingfisher
-        //}
-    
-    
     
     private func addViewsToScreen() {
         
@@ -194,6 +171,3 @@ final class ProfileViewController: UIViewController {
         ])
     }
 }
-
-
-
