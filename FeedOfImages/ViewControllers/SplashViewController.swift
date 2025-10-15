@@ -2,7 +2,6 @@ import UIKit
 import WebKit
 
 final class SplashViewController: UIViewController {
-    private let showAuthenticationScreenSegueIdentifier = "ShowAuthenticationScreen"
     
     private let profileService = ProfileService.shared
     private let storage = OAuth2TokenStorage.shared
@@ -24,8 +23,8 @@ final class SplashViewController: UIViewController {
             print("Token exists, fetching profile and switching to TabBarController")
             fetchProfile(token: token)
         } else {
-            print("Token not found, performing segue to authentication screen")
-            performSegue(withIdentifier: showAuthenticationScreenSegueIdentifier, sender: nil)
+            print("Token not found, presenting auth view controller")
+            presentAuthViewController() // ИЗМЕНЕНО: используем этот метод вместо performSegue
         }
     }
     
@@ -63,7 +62,6 @@ final class SplashViewController: UIViewController {
         authViewController.modalPresentationStyle = .fullScreen
         present(authViewController, animated: true)
     }
-
     
     private func switchToTabBarController() {
         guard let window = UIApplication.shared.windows.first else {
@@ -93,17 +91,6 @@ final class SplashViewController: UIViewController {
                 break
             }
         }
-    }
-    
-    private func fetchProfileImage(username: String) {
-        ProfileImageService.shared.fetchProfileImageURL(username: username) { [weak self] result in
-            self?.switchToTabBarController()
-        }
-    }
-    
-    private func showAuthenticationScreen() {
-        storage.token = nil
-        performSegue(withIdentifier: showAuthenticationScreenSegueIdentifier, sender: nil)
     }
 }
 
