@@ -31,7 +31,7 @@
         <!--Auth View Controller-->
         <scene sceneID="s4Q-3Q-Q67">
             <objects>
-                <viewController id="PpF-eJ-yk9" customClass="AuthViewController" customModule="FeedOfImages" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="AuthViewController" id="PpF-eJ-yk9" customClass="AuthViewController" customModule="FeedOfImages" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="15L-7f-9V2">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
