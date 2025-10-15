@@ -84,8 +84,11 @@ final class ProfileViewController: UIViewController {
         let nameLabel = UILabel()
         let loginName = UILabel()
         let descriptionLabel = UILabel()
+        
+        // Безопасная загрузка изображения для кнопки
+        let logoutButtonImage = UIImage(named: "logout_button") ?? UIImage()
         let logoutButton = UIButton.systemButton(
-            with: UIImage(named: "logout_button")!,
+            with: logoutButtonImage,
             target: self,
             action: #selector(didTapLogoutButton)
         )
