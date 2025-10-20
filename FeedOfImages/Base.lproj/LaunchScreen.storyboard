@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23727" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24128" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23721"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24063"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -24,8 +24,8 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" name="launchscreen + 1 screen"/>
                         <constraints>
-                            <constraint firstItem="LbY-vW-Go7" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="ABA-U6-rny"/>
-                            <constraint firstItem="LbY-vW-Go7" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="d0s-3o-zfi"/>
+                            <constraint firstItem="LbY-vW-Go7" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="ABA-U6-rny"/>
+                            <constraint firstItem="LbY-vW-Go7" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="d0s-3o-zfi"/>
                         </constraints>
                     </view>
                 </viewController>

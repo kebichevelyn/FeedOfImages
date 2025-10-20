@@ -1,5 +1,6 @@
-import Foundation
 import UIKit
+import WebKit
+import Kingfisher
 
 final class ProfileViewController: UIViewController {
     private var nameLabel: UILabel?
@@ -9,13 +10,73 @@ final class ProfileViewController: UIViewController {
     private var logoutButton: UIButton?
     private var profileInformation: [UIView] = []
     
+    private var profileImageServiceObserver: NSObjectProtocol?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        view.backgroundColor = UIColor(named: "launchscreen + 1 screen")
+        
         addViewsToScreen()
+        
+        if let profile = ProfileService.shared.profile {
+            updateProfileDetails(profile: profile)
+        }
+        
+        profileImageServiceObserver = NotificationCenter.default
+            .addObserver(
+                forName: ProfileImageService.didChangeNotification,
+                object: nil,
+                queue: .main
+            ) { [weak self] _ in
+                guard let self = self else { return }
+                self.updateAvatar()
+            }
+        updateAvatar()
     }
     
     // MARK: - private functions
+    
+    private func updateProfileDetails(profile: Profile) {
+        nameLabel?.text = profile.name
+        loginName?.text = profile.loginName
+        descriptionLabel?.text = profile.bio
+    }
+    
+    private func updateAvatar() {
+        guard
+            let profileImageURL = ProfileImageService.shared.avatarURL,
+            let imageUrl = URL(string: profileImageURL),
+            let imageView = avatarImage
+        else { return }
+
+        print("imageUrl: \(imageUrl)")
+
+        let placeholderImage = UIImage(systemName: "person.circle.fill")?
+            .withTintColor(.lightGray, renderingMode: .alwaysOriginal)
+            .withConfiguration(UIImage.SymbolConfiguration(pointSize: 70, weight: .regular, scale: .large))
+
+        let processor = RoundCornerImageProcessor(cornerRadius: 35)
+        imageView.kf.indicatorType = .activity
+        imageView.kf.setImage(
+            with: imageUrl,
+            placeholder: placeholderImage,
+            options: [
+                .processor(processor),
+                .scaleFactor(UIScreen.main.scale),
+                .cacheOriginalImage,
+                .forceRefresh
+            ]) { result in
+                switch result {
+                case .success(let value):
+                    print(value.image)
+                    print(value.cacheType)
+                    print(value.source)
+                case .failure(let error):
+                    print(error)
+                }
+            }
+    }
     
     private func addViewsToScreen() {
         
@@ -23,8 +84,11 @@ final class ProfileViewController: UIViewController {
         let nameLabel = UILabel()
         let loginName = UILabel()
         let descriptionLabel = UILabel()
+        
+        // Безопасная загрузка изображения для кнопки
+        let logoutButtonImage = UIImage(named: "logout_button") ?? UIImage()
         let logoutButton = UIButton.systemButton(
-            with: UIImage(named: "logout_button")!,
+            with: logoutButtonImage,
             target: self,
             action: #selector(didTapLogoutButton)
         )
@@ -112,6 +176,3 @@ final class ProfileViewController: UIViewController {
         ])
     }
 }
-
-
-
