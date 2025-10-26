@@ -9,9 +9,11 @@ final class AuthViewController: UIViewController {
     private let showWebViewSegueIdentifier = "ShowWebView"
     private let oauth2Service = OAuth2Service.shared
     private let storage = OAuth2TokenStorage.shared
+    private var isAuthenticating = false
     
     weak var delegate: AuthViewControllerDelegate?
     
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -20,6 +22,11 @@ final class AuthViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == showWebViewSegueIdentifier {
+            
+            guard !isAuthenticating else {
+                return
+            }
+            
             guard
                 let webViewViewController = segue.destination as? WebViewViewController
             else {
@@ -42,22 +49,32 @@ final class AuthViewController: UIViewController {
 
 extension AuthViewController: WebViewViewControllerDelegate {
     func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String) {
-        vc.dismiss(animated: true)
         
+        isAuthenticating = true
+
+        UIBlockingProgressHUD.show()
+        
+        vc.dismiss(animated: true)
+
         fetchOAuthToken(code) { [weak self] result in
+    
+            UIBlockingProgressHUD.dismiss()
+
             guard let self = self else { return }
-            
+
             switch result {
             case .success:
                 self.delegate?.didAuthenticate(self)
             case .failure:
-                // TODO [Sprint 11] Добавьте обработку ошибки
-                break
+                self.isAuthenticating = false
+                showAlert(in: self)
             }
         }
     }
 
     func webViewViewControllerDidCancel(_ vc: WebViewViewController) {
+        
+        isAuthenticating = false
         vc.dismiss(animated: true)
     }
 }
@@ -70,3 +87,8 @@ extension AuthViewController {
     }
 }
 
+private func showAlert(in viewController: UIViewController) {
+    let alert = UIAlertController(title: "Что-то пошло не так(", message: "Не удалось войти в систему", preferredStyle: .alert)
+    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+    viewController.present(alert, animated: true, completion: nil)
+}

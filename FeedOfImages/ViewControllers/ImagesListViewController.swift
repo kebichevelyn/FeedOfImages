@@ -1,4 +1,5 @@
 import UIKit
+import WebKit
 
 final class ImagesListViewController: UIViewController {
     private let showSingleImageSegueIdentifier = "ShowSingleImage"
