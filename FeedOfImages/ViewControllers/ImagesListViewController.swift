@@ -93,9 +93,10 @@ extension ImagesListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         
-        if indexPath.row + 1 == photos.count {
+        if indexPath.row + 1 == ImagesListService.shared.photos.count {
             print("loading next page")
             ImagesListService.shared.fetchPhotosNextPage()
+
         }
     }
 }
