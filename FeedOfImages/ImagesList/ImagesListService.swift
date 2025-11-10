@@ -27,6 +27,16 @@ struct UrlsResult: Decodable {
     let full: URL
 }
 
+struct LikeResult: Decodable {
+    let photo: PhotoLikeResult
+}
+
+struct PhotoLikeResult: Decodable {
+    let id: String
+    let likedByUser: Bool
+}
+
+
 enum ImagesListServiceError: Error {
     case requestNotCreated
     case decodingError(Error)
@@ -56,10 +66,13 @@ final class ImagesListService {
     private var lastLoadedPage: Int = 1
     private let urlSession: URLSession
     private var task: URLSessionTask?
-
+    private var likeTask: URLSessionTask?
+    
     private init(urlSession: URLSession = .shared) {
         self.urlSession = urlSession
     }
+    
+    
     
     func fetchPhotosNextPage(completion: @escaping (Result<[Photo], Error>) -> Void) {
         if task != nil { return }
@@ -93,9 +106,9 @@ final class ImagesListService {
                     self.lastLoadedPage += 1
                     
                     NotificationCenter.default.post(
-                                        name: ImagesListService.didChangeNotification,
-                                        object: self
-                                    )
+                        name: ImagesListService.didChangeNotification,
+                        object: self
+                    )
                     completion(.success(newPhotos))
                 }
                 
@@ -109,6 +122,52 @@ final class ImagesListService {
         self.task = task
         task.resume()
     }
+    
+    func changeLike(photoId: String, isLike: Bool, _ completion: @escaping (Result<Void, Error>) -> Void) {
+        if likeTask != nil { return }
+        
+        guard let request = makeLikeRequest(photoId: photoId, isLike: isLike) else {
+            completion(.failure(ImagesListServiceError.requestNotCreated))
+            return
+        }
+        
+        likeTask = urlSession.objectTask(for: request) { [weak self] (result: Result<LikeResult, Error>) in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let likeResult):
+                if let index = self.photos.firstIndex(where: { $0.id == photoId }) {
+                    let photo = self.photos[index]
+                    let updatedPhoto = Photo(
+                        id: photo.id,
+                        size: photo.size,
+                        createdAt: photo.createdAt,
+                        welcomeDescription: photo.welcomeDescription,
+                        thumbImageURL: photo.thumbImageURL,
+                        largeImageURL: photo.largeImageURL,
+                        isLiked: likeResult.photo.likedByUser
+                    )
+                    
+                    DispatchQueue.main.async {
+                        self.photos[index] = updatedPhoto
+                        completion(.success(()))
+                    }
+                } else {
+                    DispatchQueue.main.async {
+                        completion(.failure(ImagesListServiceError.requestNotCreated))
+                    }
+                }
+                
+            case .failure(let error):
+                DispatchQueue.main.async {
+                    completion(.failure(error))
+                }
+            }
+            self.likeTask = nil
+        }
+        
+        likeTask?.resume()
+    }
 }
 
 private extension ImagesListService {
@@ -120,6 +179,20 @@ private extension ImagesListService {
             return nil
         }
         var request = URLRequest(url: url)
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        return request
+    }
+    
+    func makeLikeRequest(photoId: String, isLike: Bool) -> URLRequest? {
+        guard let token = OAuth2TokenStorage.shared.token else { return nil }
+        
+        let method = isLike ? "POST" : "DELETE"
+        guard let url = URL(string: "\(Constants.defaultBaseURLGet)/photos/\(photoId)/like") else {
+            return nil
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = method
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         return request
     }
