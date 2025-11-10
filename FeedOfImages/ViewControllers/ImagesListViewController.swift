@@ -162,6 +162,30 @@ private extension ImagesListViewController {
     }
 }
 
+//extension ImagesListViewController: ImagesListCellDelegate {
+//    func imageListCellDidTapLike(_ cell: ImagesListCell) {
+//        guard let indexPath = tableView.indexPath(for: cell) else { return }
+//        let photo = photos[indexPath.row]
+//        
+//        UIBlockingProgressHUD.show()
+//        
+//        ImagesListService.shared.changeLike(photoId: photo.id, isLike: !photo.isLiked) { [weak self] result in
+//            DispatchQueue.main.async {
+//                UIBlockingProgressHUD.dismiss()
+//                
+//                switch result {
+//                case .success:
+//                    self?.photos = ImagesListService.shared.photos
+//                    cell.setIsLiked(self?.photos[indexPath.row].isLiked ?? false)
+//                case .failure:
+//                    // TODO: Показать ошибку с использованием UIAlertController
+//                    break
+//                }
+//            }
+//        }
+//    }
+//}
+
 extension ImagesListViewController: ImagesListCellDelegate {
     func imageListCellDidTapLike(_ cell: ImagesListCell) {
         guard let indexPath = tableView.indexPath(for: cell) else { return }
@@ -169,19 +193,31 @@ extension ImagesListViewController: ImagesListCellDelegate {
         
         UIBlockingProgressHUD.show()
         
-        ImagesListService.shared.changeLike(photoId: photo.id, isLike: !photo.isLiked) { [weak self] result in
+        ImagesListService.shared.changeLike(photoId: photo.id, isLike: !photo.isLiked) { [weak self] (result: Result<Void, Error>) in
             DispatchQueue.main.async {
                 UIBlockingProgressHUD.dismiss()
                 
                 switch result {
                 case .success:
+                    // Синхронизируем массив картинок с сервисом
                     self?.photos = ImagesListService.shared.photos
+                    // Изменим индикацию лайка картинки
                     cell.setIsLiked(self?.photos[indexPath.row].isLiked ?? false)
-                case .failure:
-                    // TODO: Показать ошибку с использованием UIAlertController
-                    break
+                case .failure(let error):
+                    // Покажем ошибку
+                    self?.showLikeErrorAlert(error: error)
                 }
             }
         }
+    }
+    
+    private func showLikeErrorAlert(error: Error) {
+        let alert = UIAlertController(
+            title: "Что-то пошло не так(",
+            message: "Не удалось поставить лайк",
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alert, animated: true)
     }
 }
