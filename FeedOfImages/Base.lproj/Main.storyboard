@@ -207,6 +207,11 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="" image="tab_editorial_active" id="L41-j1-D3N"/>
                     <navigationItem key="navigationItem" id="0hW-1b-Yhh"/>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                            <integer key="value" value="16"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
                     <connections>
                         <outlet property="tableView" destination="cnq-mt-15m" id="HDr-TQ-md2"/>
                         <segue destination="wIv-mW-zRm" kind="presentation" identifier="ShowSingleImage" id="bFG-ig-Doc"/>
@@ -280,6 +285,11 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="acs-Zb-9f8"/>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                            <integer key="value" value="16"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
                     <connections>
                         <outlet property="imageView" destination="wFq-5o-4A0" id="tKM-h2-bis"/>
                         <outlet property="scrollView" destination="28Y-5i-hq4" id="UEQ-pd-p8J"/>
