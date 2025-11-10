@@ -81,7 +81,7 @@ final class ImagesListService {
                         createdAt: ISO8601DateFormatter.shared.date(from: photoResult.createdAt),
                         //createdAt: DateFormatter.shared.date(from: photoResult.createdAt),
                         welcomeDescription: photoResult.description,
-                        thumbImageURL: photoResult.urls.thumb,
+                        thumbImageURL: photoResult.urls.regular,
                         largeImageURL: photoResult.urls.full,
                         //fullImageURL: photoResult.urls.full,
                         isLiked: photoResult.likedByUser
