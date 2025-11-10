@@ -30,13 +30,21 @@ enum ImagesListServiceError: Error {
     case decodingError(Error)
 }
 
-extension DateFormatter {
-    static let shared = DateFormatter()
+//extension DateFormatter {
+//    static let shared = DateFormatter()
+//}
+
+extension ISO8601DateFormatter {
+    static let shared: ISO8601DateFormatter = {
+        let formatter = ISO8601DateFormatter()
+        return formatter
+    }()
 }
 
 // Service - Fetcher
 final class ImagesListService {
     static let shared = ImagesListService()
+    static let didChangeNotification = Notification.Name(rawValue: "ImagesListServiceDidChange")
     private convenience init() {
         self.init(urlSession: .shared)
     }
@@ -68,7 +76,8 @@ final class ImagesListService {
                     return Photo(
                         id: photoResult.id,
                         size: CGSize(width: photoResult.width, height: photoResult.height),
-                        createdAt: DateFormatter.shared.date(from: photoResult.createdAt),
+                        createdAt: ISO8601DateFormatter.shared.date(from: photoResult.createdAt),
+                        //createdAt: DateFormatter.shared.date(from: photoResult.createdAt),
                         welcomeDescription: photoResult.description,
                         fullImageURL: photoResult.urls.full,
                         isLiked: photoResult.likedByUser
@@ -76,7 +85,13 @@ final class ImagesListService {
                 }
                 
                 DispatchQueue.main.async { [self] in
+                    self.photos.append(contentsOf: newPhotos)
                     self.lastLoadedPage += 1
+                    
+                    NotificationCenter.default.post(
+                                        name: ImagesListService.didChangeNotification,
+                                        object: self
+                                    )
                     completion(.success(newPhotos))
                 }
                 

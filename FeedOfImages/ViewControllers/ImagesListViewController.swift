@@ -21,9 +21,22 @@ final class ImagesListViewController: UIViewController {
 
         tableView.rowHeight = 200
         tableView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
+        
+        NotificationCenter.default.addObserver(
+                    self,
+                    selector: #selector(updateTableView),
+                    name: ImagesListService.didChangeNotification,
+                    object: nil
+                )
+                
 
         loadNextPage()
     }
+    
+    @objc private func updateTableView() {
+           photos = ImagesListService.shared.photos
+           tableView.reloadData()
+       }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == showSingleImageSegueIdentifier {
@@ -59,13 +72,32 @@ extension ImagesListViewController: UITableViewDataSource {
     }
 }
 
+//extension ImagesListViewController {
+//    func configCell(for cell: ImagesListCell, with indexPath: IndexPath) {
+//        cell.cellImage.kf.setImage(with: photos[indexPath.row].fullImageURL)
+//        cell.dateLabel.text = dateFormatter.string(from: Date())
+//
+//        let isLiked = indexPath.row % 2 == 0
+//        let likeImage = isLiked ? UIImage(named: "like_button_on") : UIImage(named: "like_button_off")
+//        cell.likeButton.setImage(likeImage, for: .normal)
+//    }
+//}
 extension ImagesListViewController {
     func configCell(for cell: ImagesListCell, with indexPath: IndexPath) {
-        cell.cellImage.kf.setImage(with: photos[indexPath.row].fullImageURL)
-        cell.dateLabel.text = dateFormatter.string(from: Date())
-
-        let isLiked = indexPath.row % 2 == 0
-        let likeImage = isLiked ? UIImage(named: "like_button_on") : UIImage(named: "like_button_off")
+        guard indexPath.row < photos.count else { return }
+        
+        let photo = photos[indexPath.row]
+        cell.cellImage.kf.setImage(with: photo.fullImageURL)
+        
+        // Используем реальную дату из фото, а не текущую
+        if let createdAt = photo.createdAt {
+            cell.dateLabel.text = dateFormatter.string(from: createdAt)
+        } else {
+            cell.dateLabel.text = ""
+        }
+        
+        // Используем реальный статус лайка, а не случайный
+        let likeImage = photo.isLiked ? UIImage(named: "like_button_on") : UIImage(named: "like_button_off")
         cell.likeButton.setImage(likeImage, for: .normal)
     }
 }
