@@ -87,7 +87,7 @@ extension ImagesListViewController {
         guard indexPath.row < photos.count else { return }
         
         let photo = photos[indexPath.row]
-        cell.cellImage.kf.setImage(with: photo.fullImageURL)
+        cell.cellImage.kf.setImage(with: photo.largeImageURL)
         
         // Используем реальную дату из фото, а не текущую
         if let createdAt = photo.createdAt {

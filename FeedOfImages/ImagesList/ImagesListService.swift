@@ -5,7 +5,9 @@ struct Photo {
     let size: CGSize
     let createdAt: Date?
     let welcomeDescription: String?
-    let fullImageURL: URL
+    let thumbImageURL: URL
+    let largeImageURL: URL
+    //let fullImageURL: URL
     let isLiked: Bool
 }
 
@@ -79,7 +81,9 @@ final class ImagesListService {
                         createdAt: ISO8601DateFormatter.shared.date(from: photoResult.createdAt),
                         //createdAt: DateFormatter.shared.date(from: photoResult.createdAt),
                         welcomeDescription: photoResult.description,
-                        fullImageURL: photoResult.urls.full,
+                        thumbImageURL: photoResult.urls.thumb,
+                        largeImageURL: photoResult.urls.full,
+                        //fullImageURL: photoResult.urls.full,
                         isLiked: photoResult.likedByUser
                     )
                 }
