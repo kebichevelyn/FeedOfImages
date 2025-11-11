@@ -3,6 +3,7 @@ import UIKit
 import WebKit
 
 final class SingleImageViewController: UIViewController {
+    var fullImageURL: URL?
     var image: UIImage? {
         didSet {
             guard isViewLoaded, let image else { return }
@@ -21,11 +22,52 @@ final class SingleImageViewController: UIViewController {
         scrollView.minimumZoomScale = 0.1
         scrollView.maximumZoomScale = 1.25
         
-        guard let image else { return }
-        imageView.image = image
-        imageView.frame.size = image.size
-        rescaleAndCenterImageInScrollView(image: image)
+        //        guard let image else { return }
+        //        imageView.image = image
+        //        imageView.frame.size = image.size
+        //        rescaleAndCenterImageInScrollView(image: image)
+        
+//        if let fullImageURL = fullImageURL {
+//            loadFullImage(from: fullImageURL)
+//        } else if let image = image {
+//            // Или используем переданное изображение
+//            imageView.image = image
+//            imageView.frame.size = image.size
+//            rescaleAndCenterImageInScrollView(image: image)
+//        }
+        
+        loadImage()
     }
+    
+    private func loadImage() {
+           guard let fullImageURL = fullImageURL else { return }
+           
+           UIBlockingProgressHUD.show()
+           imageView.kf.setImage(with: fullImageURL) { [weak self] result in
+               UIBlockingProgressHUD.dismiss()
+               
+               guard let self = self else { return }
+               switch result {
+               case .success(let imageResult):
+                   self.rescaleAndCenterImageInScrollView(image: imageResult.image)
+               case .failure:
+                   self.showError()
+               }
+           }
+       }
+       
+       private func showError() {
+           let alert = UIAlertController(
+               title: "Что-то пошло не так",
+               message: "Попробовать ещё раз?",
+               preferredStyle: .alert
+           )
+           alert.addAction(UIAlertAction(title: "Не надо", style: .default))
+           alert.addAction(UIAlertAction(title: "Повторить", style: .default) { [weak self] _ in
+               self?.loadImage()
+           })
+           present(alert, animated: true)
+       }
     
     @IBAction private func didTapBackButton(_ sender: Any) {
         dismiss(animated: true, completion: nil)

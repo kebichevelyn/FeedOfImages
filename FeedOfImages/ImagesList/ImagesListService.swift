@@ -7,7 +7,7 @@ struct Photo {
     let welcomeDescription: String?
     let thumbImageURL: URL
     let largeImageURL: URL
-    //let fullImageURL: URL
+   // let fullImageURL: URL
     let isLiked: Bool
 }
 
@@ -96,7 +96,7 @@ final class ImagesListService {
                         welcomeDescription: photoResult.description,
                         thumbImageURL: photoResult.urls.regular,
                         largeImageURL: photoResult.urls.full,
-                        //fullImageURL: photoResult.urls.full,
+                       // fullImageURL: photoResult.urls.full,
                         isLiked: photoResult.likedByUser
                     )
                 }
