@@ -60,7 +60,7 @@ final class ImagesListViewController: UIViewController {
             }
             let photo = photos[indexPath.row]
             viewController.fullImageURL = photo.largeImageURL
-            //            viewController.image = image
+            
         } else {
             super.prepare(for: segue, sender: sender)
         }
@@ -89,16 +89,7 @@ extension ImagesListViewController: UITableViewDataSource {
     }
 }
 
-//extension ImagesListViewController {
-//    func configCell(for cell: ImagesListCell, with indexPath: IndexPath) {
-//        cell.cellImage.kf.setImage(with: photos[indexPath.row].fullImageURL)
-//        cell.dateLabel.text = dateFormatter.string(from: Date())
-//
-//        let isLiked = indexPath.row % 2 == 0
-//        let likeImage = isLiked ? UIImage(named: "like_button_on") : UIImage(named: "like_button_off")
-//        cell.likeButton.setImage(likeImage, for: .normal)
-//    }
-//}
+
 extension ImagesListViewController {
     func configCell(for cell: ImagesListCell, with indexPath: IndexPath) {
         guard indexPath.row < photos.count else { return }
@@ -156,39 +147,16 @@ private extension ImagesListViewController {
             guard self != nil else { return }
             switch result {
             case .success(_):
-                // Данные теперь приходят через нотификацию, поэтому здесь ничего не делаем
+                
                 break
             case .failure:
-                // Обработка ошибки
+                
                 break
             }
         }
     }
 }
 
-//extension ImagesListViewController: ImagesListCellDelegate {
-//    func imageListCellDidTapLike(_ cell: ImagesListCell) {
-//        guard let indexPath = tableView.indexPath(for: cell) else { return }
-//        let photo = photos[indexPath.row]
-//        
-//        UIBlockingProgressHUD.show()
-//        
-//        ImagesListService.shared.changeLike(photoId: photo.id, isLike: !photo.isLiked) { [weak self] result in
-//            DispatchQueue.main.async {
-//                UIBlockingProgressHUD.dismiss()
-//                
-//                switch result {
-//                case .success:
-//                    self?.photos = ImagesListService.shared.photos
-//                    cell.setIsLiked(self?.photos[indexPath.row].isLiked ?? false)
-//                case .failure:
-//                    // TODO: Показать ошибку с использованием UIAlertController
-//                    break
-//                }
-//            }
-//        }
-//    }
-//}
 
 extension ImagesListViewController: ImagesListCellDelegate {
     func imageListCellDidTapLike(_ cell: ImagesListCell) {
@@ -203,12 +171,12 @@ extension ImagesListViewController: ImagesListCellDelegate {
                 
                 switch result {
                 case .success:
-                    // Синхронизируем массив картинок с сервисом
+                    
                     self?.photos = ImagesListService.shared.photos
-                    // Изменим индикацию лайка картинки
+                    
                     cell.setIsLiked(self?.photos[indexPath.row].isLiked ?? false)
                 case .failure(let error):
-                    // Покажем ошибку
+                    
                     self?.showLikeErrorAlert(error: error)
                 }
             }

@@ -19,35 +19,35 @@ final class WebViewViewController: UIViewController {
     private var estimatedProgressObservation: NSKeyValueObservation?
     
     weak var delegate: WebViewViewControllerDelegate?
-
+    
     
     //MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         webView.navigationDelegate = self
-
+        
         loadAuthView()
-
+        
         updateProgress()
     }
-
+    
     private func loadAuthView() {
         guard var urlComponents = URLComponents(string: WebViewConstants.unsplashAuthorizeURLString) else {
             return
         }
-
+        
         urlComponents.queryItems = [
             URLQueryItem(name: "client_id", value: Constants.accessKey),
             URLQueryItem(name: "redirect_uri", value: Constants.redirectURI),
             URLQueryItem(name: "response_type", value: "code"),
             URLQueryItem(name: "scope", value: Constants.accessScope)
         ]
-
+        
         guard let url = urlComponents.url else {
             return
         }
-
+        
         let request = URLRequest(url: url)
         webView.load(request)
     }
@@ -55,7 +55,7 @@ final class WebViewViewController: UIViewController {
     @IBAction private func didTapBackButton(_ sender: Any?) {
         delegate?.webViewViewControllerDidCancel(self)
     }
-
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         estimatedProgressObservation = webView.observe(
@@ -67,13 +67,13 @@ final class WebViewViewController: UIViewController {
              })
         updateProgress()
     }
-
+    
     override func viewWillDisappear(_ animated: Bool) {
-            super.viewWillDisappear(animated)
-            estimatedProgressObservation = nil
-        }
-
-
+        super.viewWillDisappear(animated)
+        estimatedProgressObservation = nil
+    }
+    
+    
     private func updateProgress() {
         progressView.progress = Float(webView.estimatedProgress)
         progressView.isHidden = fabs(webView.estimatedProgress - 1.0) <= 0.0001

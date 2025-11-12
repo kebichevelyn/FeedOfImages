@@ -7,13 +7,13 @@ final class SplashViewController: UIViewController {
     private let storage = OAuth2TokenStorage.shared
     
     private var imageView: UIImageView?
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = UIColor(named: "launchscreen + 1 screen") ?? .black
     }
-
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
@@ -24,7 +24,7 @@ final class SplashViewController: UIViewController {
             fetchProfile(token: token)
         } else {
             print("Token not found, presenting auth view controller")
-            presentAuthViewController() // ИЗМЕНЕНО: используем этот метод вместо performSegue
+            presentAuthViewController()
         }
     }
     
@@ -39,13 +39,13 @@ final class SplashViewController: UIViewController {
     
     private func setupImageView() {
         let imageSplashScreenLogo = UIImage(named: "splash_screen_logo") ?? UIImage()
-
+        
         let imageView = UIImageView(image: imageSplashScreenLogo)
         self.imageView = imageView
-
+        
         imageView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(imageView)
-
+        
         NSLayoutConstraint.activate([
             imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             imageView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
@@ -78,14 +78,14 @@ final class SplashViewController: UIViewController {
         UIBlockingProgressHUD.show()
         profileService.fetchProfile(token) { [weak self] result in
             UIBlockingProgressHUD.dismiss()
-
+            
             guard let self = self else { return }
-
+            
             switch result {
             case let .success(profile):
                 ProfileImageService.shared.fetchProfileImageURL(username: profile.username) { _ in }
                 self.switchToTabBarController()
-
+                
             case let .failure(error):
                 print(error)
                 break

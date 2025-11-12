@@ -7,7 +7,6 @@ struct Photo {
     let welcomeDescription: String?
     let thumbImageURL: URL
     let largeImageURL: URL
-   // let fullImageURL: URL
     let isLiked: Bool
 }
 
@@ -42,9 +41,7 @@ enum ImagesListServiceError: Error {
     case decodingError(Error)
 }
 
-//extension DateFormatter {
-//    static let shared = DateFormatter()
-//}
+
 
 extension ISO8601DateFormatter {
     static let shared: ISO8601DateFormatter = {
@@ -92,11 +89,11 @@ final class ImagesListService {
                         id: photoResult.id,
                         size: CGSize(width: photoResult.width, height: photoResult.height),
                         createdAt: ISO8601DateFormatter.shared.date(from: photoResult.createdAt),
-                        //createdAt: DateFormatter.shared.date(from: photoResult.createdAt),
+                        
                         welcomeDescription: photoResult.description,
                         thumbImageURL: photoResult.urls.regular,
                         largeImageURL: photoResult.urls.full,
-                       // fullImageURL: photoResult.urls.full,
+                        
                         isLiked: photoResult.likedByUser
                     )
                 }
@@ -170,13 +167,13 @@ final class ImagesListService {
     }
     
     func reset() {
-            photos.removeAll()
-            lastLoadedPage = 1
-            task?.cancel()
-            task = nil
-            likeTask?.cancel()
-            likeTask = nil
-        }
+        photos.removeAll()
+        lastLoadedPage = 1
+        task?.cancel()
+        task = nil
+        likeTask?.cancel()
+        likeTask = nil
+    }
 }
 
 private extension ImagesListService {

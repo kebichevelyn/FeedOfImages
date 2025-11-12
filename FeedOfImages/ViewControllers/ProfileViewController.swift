@@ -49,11 +49,11 @@ final class ProfileViewController: UIViewController {
             let imageUrl = URL(string: profileImageURL),
             let imageView = avatarImage
         else { return }
-
+        
         let placeholderImage = UIImage(systemName: "person.circle.fill")?
             .withTintColor(.lightGray, renderingMode: .alwaysOriginal)
             .withConfiguration(UIImage.SymbolConfiguration(pointSize: 70, weight: .regular, scale: .large))
-
+        
         let processor = RoundCornerImageProcessor(cornerRadius: 35)
         imageView.kf.indicatorType = .activity
         imageView.kf.setImage(
@@ -67,11 +67,9 @@ final class ProfileViewController: UIViewController {
             ]) { result in
                 switch result {
                 case .success(let value):
-                    print(value.image)
-                    print(value.cacheType)
-                    print(value.source)
+                    print("аватарка загружена: \(value.image.size)")
                 case .failure(let error):
-                    print(error)
+                    print("ошибка загрузки аватарки: \(error)")
                 }
             }
     }
@@ -146,12 +144,10 @@ final class ProfileViewController: UIViewController {
         ])
     }
     
-    // === ЗАМЕНИТЬ ЭТОТ МЕТОД ===
     @objc private func didTapLogoutButton() {
         showLogoutConfirmation()
     }
     
-    // === ДОБАВИТЬ ЭТИ МЕТОДЫ ===
     private func showLogoutConfirmation() {
         let alert = UIAlertController(
             title: "Пока, пока!",
@@ -171,34 +167,4 @@ final class ProfileViewController: UIViewController {
     private func performLogout() {
         ProfileLogoutService.shared.logout()
     }
-    
-    // === УДАЛИТЬ СТАРЫЙ МЕТОД didTapLogoutButton (если есть такой с очисткой вьюх) ===
-    // Удалите этот метод, если он есть:
-    /*
-    @objc private func didTapLogoutButton () {
-        for view in profileInformation {
-            view.removeFromSuperview()
-        }
-        profileInformation.removeAll()
-        
-        nameLabel = nil
-        loginName = nil
-        descriptionLabel = nil
-        avatarImage = nil
-        
-        let emptyAvatar = UIImageView(image: UIImage(named: "emptyAvatar"))
-        emptyAvatar.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(emptyAvatar)
-        guard let logoutButton = self.logoutButton else { return }
-        
-        NSLayoutConstraint.activate([
-            emptyAvatar.widthAnchor.constraint(equalToConstant: 70),
-            emptyAvatar.heightAnchor.constraint(equalToConstant: 70),
-            emptyAvatar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            emptyAvatar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 32),
-            
-            logoutButton.centerYAnchor.constraint(equalTo: emptyAvatar.centerYAnchor)
-        ])
-    }
-    */
 }
