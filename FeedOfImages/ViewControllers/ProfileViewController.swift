@@ -49,13 +49,11 @@ final class ProfileViewController: UIViewController {
             let imageUrl = URL(string: profileImageURL),
             let imageView = avatarImage
         else { return }
-
-        print("imageUrl: \(imageUrl)")
-
+        
         let placeholderImage = UIImage(systemName: "person.circle.fill")?
             .withTintColor(.lightGray, renderingMode: .alwaysOriginal)
             .withConfiguration(UIImage.SymbolConfiguration(pointSize: 70, weight: .regular, scale: .large))
-
+        
         let processor = RoundCornerImageProcessor(cornerRadius: 35)
         imageView.kf.indicatorType = .activity
         imageView.kf.setImage(
@@ -69,11 +67,9 @@ final class ProfileViewController: UIViewController {
             ]) { result in
                 switch result {
                 case .success(let value):
-                    print(value.image)
-                    print(value.cacheType)
-                    print(value.source)
+                    print("аватарка загружена: \(value.image.size)")
                 case .failure(let error):
-                    print(error)
+                    print("ошибка загрузки аватарки: \(error)")
                 }
             }
     }
@@ -85,7 +81,6 @@ final class ProfileViewController: UIViewController {
         let loginName = UILabel()
         let descriptionLabel = UILabel()
         
-        // Безопасная загрузка изображения для кнопки
         let logoutButtonImage = UIImage(named: "logout_button") ?? UIImage()
         let logoutButton = UIButton.systemButton(
             with: logoutButtonImage,
@@ -149,30 +144,27 @@ final class ProfileViewController: UIViewController {
         ])
     }
     
-    @objc private func didTapLogoutButton () {
+    @objc private func didTapLogoutButton() {
+        showLogoutConfirmation()
+    }
+    
+    private func showLogoutConfirmation() {
+        let alert = UIAlertController(
+            title: "Пока, пока!",
+            message: "Уверены, что хотите выйти?",
+            preferredStyle: .alert
+        )
         
-        for view in profileInformation {
-            view.removeFromSuperview()
-        }
-        profileInformation.removeAll()
+        alert.addAction(UIAlertAction(title: "Да", style: .default) { [weak self] _ in
+            self?.performLogout()
+        })
         
-        nameLabel = nil
-        loginName = nil
-        descriptionLabel = nil
-        avatarImage = nil
+        alert.addAction(UIAlertAction(title: "Нет", style: .cancel))
         
-        let emptyAvatar = UIImageView(image: UIImage(named: "emptyAvatar"))
-        emptyAvatar.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(emptyAvatar)
-        guard let logoutButton = self.logoutButton else { return }
-        
-        NSLayoutConstraint.activate([
-            emptyAvatar.widthAnchor.constraint(equalToConstant: 70),
-            emptyAvatar.heightAnchor.constraint(equalToConstant: 70),
-            emptyAvatar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            emptyAvatar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 32),
-            
-            logoutButton.centerYAnchor.constraint(equalTo: emptyAvatar.centerYAnchor)
-        ])
+        present(alert, animated: true)
+    }
+    
+    private func performLogout() {
+        ProfileLogoutService.shared.logout()
     }
 }

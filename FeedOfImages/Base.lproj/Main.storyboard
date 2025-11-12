@@ -162,6 +162,9 @@
                                                     </constraints>
                                                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                     <state key="normal" image="like_button_on"/>
+                                                    <connections>
+                                                        <action selector="likeButtonClicked:" destination="ZfW-73-Ec0" eventType="touchUpInside" id="nc7-Nw-zQt"/>
+                                                    </connections>
                                                 </button>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="27 августа 2022" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jyr-fn-8Cd">
                                                     <rect key="frame" x="24.000000000000007" y="196" width="101.66666666666669" height="16"/>
@@ -207,6 +210,11 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="" image="tab_editorial_active" id="L41-j1-D3N"/>
                     <navigationItem key="navigationItem" id="0hW-1b-Yhh"/>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                            <integer key="value" value="16"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
                     <connections>
                         <outlet property="tableView" destination="cnq-mt-15m" id="HDr-TQ-md2"/>
                         <segue destination="wIv-mW-zRm" kind="presentation" identifier="ShowSingleImage" id="bFG-ig-Doc"/>
@@ -280,6 +288,11 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="acs-Zb-9f8"/>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                            <integer key="value" value="16"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
                     <connections>
                         <outlet property="imageView" destination="wFq-5o-4A0" id="tKM-h2-bis"/>
                         <outlet property="scrollView" destination="28Y-5i-hq4" id="UEQ-pd-p8J"/>
