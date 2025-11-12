@@ -50,8 +50,6 @@ final class ProfileViewController: UIViewController {
             let imageView = avatarImage
         else { return }
 
-        print("imageUrl: \(imageUrl)")
-
         let placeholderImage = UIImage(systemName: "person.circle.fill")?
             .withTintColor(.lightGray, renderingMode: .alwaysOriginal)
             .withConfiguration(UIImage.SymbolConfiguration(pointSize: 70, weight: .regular, scale: .large))
@@ -85,7 +83,6 @@ final class ProfileViewController: UIViewController {
         let loginName = UILabel()
         let descriptionLabel = UILabel()
         
-        // Безопасная загрузка изображения для кнопки
         let logoutButtonImage = UIImage(named: "logout_button") ?? UIImage()
         let logoutButton = UIButton.systemButton(
             with: logoutButtonImage,
@@ -149,8 +146,36 @@ final class ProfileViewController: UIViewController {
         ])
     }
     
-    @objc private func didTapLogoutButton () {
+    // === ЗАМЕНИТЬ ЭТОТ МЕТОД ===
+    @objc private func didTapLogoutButton() {
+        showLogoutConfirmation()
+    }
+    
+    // === ДОБАВИТЬ ЭТИ МЕТОДЫ ===
+    private func showLogoutConfirmation() {
+        let alert = UIAlertController(
+            title: "Пока, пока!",
+            message: "Уверены, что хотите выйти?",
+            preferredStyle: .alert
+        )
         
+        alert.addAction(UIAlertAction(title: "Да", style: .default) { [weak self] _ in
+            self?.performLogout()
+        })
+        
+        alert.addAction(UIAlertAction(title: "Нет", style: .cancel))
+        
+        present(alert, animated: true)
+    }
+    
+    private func performLogout() {
+        ProfileLogoutService.shared.logout()
+    }
+    
+    // === УДАЛИТЬ СТАРЫЙ МЕТОД didTapLogoutButton (если есть такой с очисткой вьюх) ===
+    // Удалите этот метод, если он есть:
+    /*
+    @objc private func didTapLogoutButton () {
         for view in profileInformation {
             view.removeFromSuperview()
         }
@@ -175,4 +200,5 @@ final class ProfileViewController: UIViewController {
             logoutButton.centerYAnchor.constraint(equalTo: emptyAvatar.centerYAnchor)
         ])
     }
+    */
 }

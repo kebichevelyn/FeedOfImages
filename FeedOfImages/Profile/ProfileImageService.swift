@@ -74,4 +74,10 @@ final class ProfileImageService {
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         return request
     }
+    
+    func reset() {
+            avatarURL = nil
+            task?.cancel()
+            task = nil
+        }
 }

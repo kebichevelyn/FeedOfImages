@@ -168,6 +168,15 @@ final class ImagesListService {
         
         likeTask?.resume()
     }
+    
+    func reset() {
+            photos.removeAll()
+            lastLoadedPage = 1
+            task?.cancel()
+            task = nil
+            likeTask?.cancel()
+            likeTask = nil
+        }
 }
 
 private extension ImagesListService {

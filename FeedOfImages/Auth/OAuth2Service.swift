@@ -25,7 +25,7 @@ final class OAuth2Service {
     
     private init() { }
     
-    // MARK: - Token 
+    // MARK: - Token
     
     func fetchOAuthToken(_ code: String, completion: @escaping (Result<String, Error>) -> Void) {
         assert(Thread.isMainThread)
@@ -105,11 +105,9 @@ final class OAuth2Service {
         return request
     }
     
-   // private struct OAuthTokenResponseBody: Codable {
-        //let accessToken: String
-        
-        //enum CodingKeys: String, CodingKey {
-            //case accessToken = "access_token"
-        }
-    //}
-//}
+    func reset() {
+        task?.cancel()
+        task = nil
+        lastCode = nil
+    }
+}
