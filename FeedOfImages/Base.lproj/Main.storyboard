@@ -85,7 +85,7 @@
         <!--Web View View Controller-->
         <scene sceneID="CfY-i7-sJy">
             <objects>
-                <viewController id="aa9-SE-ZpR" customClass="WebViewViewController" customModule="FeedOfImages" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="WebViewViewController" id="aa9-SE-ZpR" customClass="WebViewViewController" customModule="FeedOfImages" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="XYk-6q-jJm">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
