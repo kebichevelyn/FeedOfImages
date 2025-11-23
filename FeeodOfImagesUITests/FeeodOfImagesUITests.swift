@@ -36,7 +36,7 @@ class Image_FeedUITests: XCTestCase {
             let loginTextField = webView.descendants(matching: .textField).element
             if loginTextField.waitForExistence(timeout: 5) {
                 loginTextField.tap()
-                loginTextField.typeText("KebichEvelina@yandex.by")
+                loginTextField.typeText("...")
                 print("Логин введен")
             }
             
@@ -45,8 +45,8 @@ class Image_FeedUITests: XCTestCase {
             let passwordTextField = webView.descendants(matching: .secureTextField).element
             if passwordTextField.waitForExistence(timeout: 5) {
                 passwordTextField.tap()
-                passwordTextField.typeText("dinalina2005")
-                print("✅ Пароль введен")
+                passwordTextField.typeText("...")
+                print(" Пароль введен")
             }
             
             app.tap()
