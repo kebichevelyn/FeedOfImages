@@ -35,7 +35,7 @@ final class ImagesListViewPresenterTests: XCTestCase {
         // when
         presenter.changeLike(for: "test_photo_id", isLike: true)
         
-        // then - проверяем что не падает
+        // then
         XCTAssertTrue(true)
     }
     
@@ -72,7 +72,7 @@ final class ImagesListViewPresenterTests: XCTestCase {
         // when
         presenter.didSelectRow(at: indexPath)
         
-        // then - не должно падать даже если фото нет
+        // then
         XCTAssertFalse(view.showSingleImageViewControllerCalled)
     }
     
@@ -109,7 +109,7 @@ final class ImagesListViewPresenterTests: XCTestCase {
             object: nil
         )
         
-        // then - проверяем что не падает при нотификации
+        // then
         XCTAssertTrue(true)
     }
 }

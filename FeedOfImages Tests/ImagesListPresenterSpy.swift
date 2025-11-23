@@ -2,7 +2,7 @@ import Foundation
 @testable import FeedOfImages
 
 final class ImagesListPresenterSpy: ImagesListViewPresenterProtocol {
-    weak var view: ImagesListViewControllerProtocol? // Добавляем weak!
+    weak var view: ImagesListViewControllerProtocol?
     
     var viewDidLoadCalled = false
     var fetchPhotosNextPageCalled = false

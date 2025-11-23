@@ -36,7 +36,7 @@ final class ProfileViewPresenterTests: XCTestCase {
         // when
         presenter.logout()
         
-        // then - проверяем что не падает (значит вызвался shared.logout())
+        // then
         XCTAssertTrue(true)
     }
     
@@ -47,13 +47,13 @@ final class ProfileViewPresenterTests: XCTestCase {
         presenter.view = view
         
         // when
-        presenter.viewDidLoad() // настраиваем observer
+        presenter.viewDidLoad()
         NotificationCenter.default.post(
             name: ProfileImageService.didChangeNotification,
             object: nil
         )
         
-        // then - проверяем что view обновляется при нотификации
+        // then
         XCTAssertTrue(view.updateAvatarCalled)
     }
     
@@ -61,7 +61,7 @@ final class ProfileViewPresenterTests: XCTestCase {
         // given
         let presenter = ProfileViewPresenter()
         
-        // then - проверяем что презентер создается с shared сервисами
+        // then
         XCTAssertNotNil(presenter)
     }
     
@@ -87,7 +87,7 @@ final class ProfileViewPresenterTests: XCTestCase {
         // when
         presenter = nil
         
-        // then - проверяем что нет утечек памяти
+        // then
         XCTAssertNil(weakPresenter)
     }
     
@@ -98,14 +98,13 @@ final class ProfileViewPresenterTests: XCTestCase {
         presenter.view = view
         
         presenter.viewDidLoad()
-        view.updateAvatarCalled = false // Сбрасываем флаг
+        view.updateAvatarCalled = false
         
         // when
-        // Multiple notifications
         NotificationCenter.default.post(name: ProfileImageService.didChangeNotification, object: nil)
         NotificationCenter.default.post(name: ProfileImageService.didChangeNotification, object: nil)
         
-        // then - должен обработать хотя бы один
+        // then
         XCTAssertTrue(view.updateAvatarCalled)
     }
     
@@ -116,11 +115,11 @@ final class ProfileViewPresenterTests: XCTestCase {
         presenter.view = view
         
         // when
-        view = nil // Удаляем view
+        view = nil
         
-        // then - презентер не должен падать при обращении к weak view
+        // then
         presenter.didTapLogoutButton()
-        XCTAssertTrue(true) // Просто проверяем что не упало
+        XCTAssertTrue(true)
     }
     
     func testRepeatedViewDidLoad() {
@@ -131,10 +130,9 @@ final class ProfileViewPresenterTests: XCTestCase {
         
         // when
         presenter.viewDidLoad()
-        view.updateAvatarCalled = false // Сбрасываем
-        presenter.viewDidLoad() // Вызываем повторно
-        
-        // then - должен обработать повторный вызов
+        view.updateAvatarCalled = false
+        presenter.viewDidLoad()
+        // then
         XCTAssertTrue(view.updateAvatarCalled)
     }
 }

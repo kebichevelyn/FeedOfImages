@@ -1,10 +1,3 @@
-//
-//  ImagesListServiceProtocol.swift
-//  FeedOfImages
-//
-//  Created by Evelina Kebich on 23.11.25.
-//
-
 import Foundation
 
 protocol ImagesListServiceProtocol {
@@ -13,5 +6,4 @@ protocol ImagesListServiceProtocol {
     func changeLike(photoId: String, isLike: Bool, _ completion: @escaping (Result<Void, Error>) -> Void)
 }
 
-// Конформность существующего сервиса
 extension ImagesListService: ImagesListServiceProtocol {}

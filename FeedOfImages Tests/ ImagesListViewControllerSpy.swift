@@ -1,10 +1,3 @@
-//
-//   ImagesListViewControllerSpy.swift
-//  FeedOfImages Tests
-//
-//  Created by Evelina Kebich on 23.11.25.
-//
-
 import Foundation
 import Foundation
 @testable import FeedOfImages

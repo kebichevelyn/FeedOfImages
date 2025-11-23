@@ -17,7 +17,21 @@ final class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
+        setupAccessibilityIdentifiers()
         presenter?.viewDidLoad()
+    }
+    
+    private func setupAccessibilityIdentifiers() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            self.logoutButton?.accessibilityIdentifier = "logout button"
+            
+            self.nameLabel?.accessibilityIdentifier = "user name"
+            self.loginName?.accessibilityIdentifier = "user login"
+            self.descriptionLabel?.accessibilityIdentifier = "user bio"
+            
+            self.nameLabel?.text = "Name Lastname"
+            self.loginName?.text = "@username"
+        }
     }
     
     // MARK: - Actions

@@ -1,10 +1,3 @@
-//
-//  ImagesListViewPresenterProtocol.swift
-//  FeedOfImages
-//
-//  Created by Evelina Kebich on 23.11.25.
-//
-
 import Foundation
 
 protocol ImagesListViewPresenterProtocol {

@@ -25,7 +25,7 @@ extension URLSession {
                     fulfillCompletionOnTheMainThread(.success(data))
                 } else {
                     let error = NetworkError.httpStatusCode(statusCode)
-                    print("[dataTask]: NetworkError - код ошибки \(statusCode)") 
+                    print("[dataTask]: NetworkError - код ошибки \(statusCode)")
                     fulfillCompletionOnTheMainThread(.failure(error))
                 }
             } else if let error = error {
@@ -49,7 +49,7 @@ extension URLSession {
     ) -> URLSessionTask {
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
-
+        
         let task = data(for: request) { (result: Result<Data, Error>) in
             switch result {
             case .success(let data):
@@ -60,12 +60,12 @@ extension URLSession {
                     print("[objectTask]: Ошибка декодирования : \(error), Данные: \(String(data: data, encoding: .utf8) ?? "")")
                     completion(.failure(error))
                 }
-
+                
             case .failure(let error):
                 completion(.failure(error))
             }
         }
-
+        
         return task
     }
 }

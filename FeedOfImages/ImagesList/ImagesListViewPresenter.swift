@@ -1,10 +1,3 @@
-//
-//  ImagesListViewPresenter.swift
-//  FeedOfImages
-//
-//  Created by Evelina Kebich on 23.11.25.
-//
-
 import Foundation
 import UIKit
 
@@ -32,7 +25,7 @@ final class ImagesListViewPresenter: ImagesListViewPresenterProtocol {
         imagesListService.fetchPhotosNextPage { [weak self] result in
             switch result {
             case .success:
-                break // Уведомление придет через NotificationCenter
+                break
             case .failure(let error):
                 print("Ошибка загрузки фото: \(error)")
             }
@@ -44,7 +37,6 @@ final class ImagesListViewPresenter: ImagesListViewPresenterProtocol {
             DispatchQueue.main.async {
                 switch result {
                 case .success:
-                    // Обновляем локальные данные
                     self?.photos = self?.imagesListService.photos ?? []
                 case .failure(let error):
                     self?.view?.showLikeErrorAlert(error: error)
