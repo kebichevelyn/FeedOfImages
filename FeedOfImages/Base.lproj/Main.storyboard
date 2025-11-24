@@ -227,7 +227,7 @@
         <!--Single Image View Controller-->
         <scene sceneID="BD0-c7-c62">
             <objects>
-                <viewController modalPresentationStyle="fullScreen" id="wIv-mW-zRm" customClass="SingleImageViewController" customModule="FeedOfImages" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SingleImageViewController" modalPresentationStyle="fullScreen" id="wIv-mW-zRm" customClass="SingleImageViewController" customModule="FeedOfImages" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="fRq-B3-LzY">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
