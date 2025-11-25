@@ -8,35 +8,93 @@ class Image_FeedUITests: XCTestCase {
         app.launch()
     }
     
+//    func testAuth() throws {
+//        let authenticateButton = app.buttons["Войти"]
+//        XCTAssertTrue(authenticateButton.waitForExistence(timeout: 5))
+//        authenticateButton.tap()
+//        
+//        let webView = app.webViews["UnsplashWebView"]
+//        XCTAssertTrue(webView.waitForExistence(timeout: 5))
+//        
+//        let loginTextField = webView.descendants(matching: .textField).element
+//        XCTAssertTrue(loginTextField.waitForExistence(timeout: 5))
+//        
+//        loginTextField.tap()
+//        loginTextField.typeText("KebichEvelina@yandex.by")
+//        webView.swipeUp()
+//        
+//        let passwordTextField = webView.descendants(matching: .secureTextField).element
+//        XCTAssertTrue(passwordTextField.waitForExistence(timeout: 5))
+//        
+//        passwordTextField.tap()
+//        passwordTextField.typeText("dinalina2005")
+//        webView.swipeUp()
+//        
+//        // Нажать кнопку логина
+//        webView.buttons["Login"].tap()
+//        
+//        // Подождать, пока открывается экран ленты
+//        let tablesQuery = app.tables
+//        let cell = tablesQuery.children(matching: .cell).element(boundBy: 0)
+//        XCTAssertTrue(cell.waitForExistence(timeout: 5))
+//    }
+    
     func testAuth() throws {
+        let app = XCUIApplication()
+        app.launch()
+        
         let authenticateButton = app.buttons["Войти"]
         XCTAssertTrue(authenticateButton.waitForExistence(timeout: 5))
         authenticateButton.tap()
         
         let webView = app.webViews["UnsplashWebView"]
-        XCTAssertTrue(webView.waitForExistence(timeout: 5))
+        XCTAssertTrue(webView.waitForExistence(timeout: 10))
+        sleep(3)
         
-        let loginTextField = webView.descendants(matching: .textField).element
-        XCTAssertTrue(loginTextField.waitForExistence(timeout: 5))
-        
+        // Ввод логина
+        let loginTextField = webView.textFields.element(boundBy: 0)
+        XCTAssertTrue(loginTextField.waitForExistence(timeout: 10))
         loginTextField.tap()
-        loginTextField.typeText("email")
-        webView.swipeUp()
+        sleep(2)
+        loginTextField.typeText("KebichEvelina@yandex.by")
         
-        let passwordTextField = webView.descendants(matching: .secureTextField).element
-        XCTAssertTrue(passwordTextField.waitForExistence(timeout: 5))
+        // Переход к паролю
+        webView.tap()
+        sleep(1)
         
+        let passwordTextField = webView.secureTextFields.element(boundBy: 0)
+        XCTAssertTrue(passwordTextField.waitForExistence(timeout: 10))
+        
+        // Пытаемся ввести пароль разными способами
         passwordTextField.tap()
-        passwordTextField.typeText("password")
-        webView.swipeUp()
+        sleep(3)
         
-        // Нажать кнопку логина
-        webView.buttons["Login"].tap()
+        // Способ 1: Обычный ввод
+        passwordTextField.typeText("dinalina2005")
+        sleep(1)
         
-        // Подождать, пока открывается экран ленты
-        let tablesQuery = app.tables
-        let cell = tablesQuery.children(matching: .cell).element(boundBy: 0)
-        XCTAssertTrue(cell.waitForExistence(timeout: 5))
+        // Проверяем, ввелось ли
+        if passwordTextField.value as? String != "dinalina2005" {
+            // Способ 2: Через paste
+            UIPasteboard.general.string = "dinalina2005"
+            passwordTextField.doubleTap()
+            sleep(1)
+            if app.menuItems["Paste"].waitForExistence(timeout: 2) {
+                app.menuItems["Paste"].tap()
+            }
+        }
+        
+        sleep(1)
+        
+        // Нажимаем кнопку входа
+        let loginButton = webView.buttons["Login"]
+        if loginButton.waitForExistence(timeout: 5) {
+            loginButton.tap()
+        }
+        
+        // Ждем загрузки
+        let cell = app.tables.cells.element(boundBy: 0)
+        XCTAssertTrue(cell.waitForExistence(timeout: 15))
     }
     
     func testFeed() throws {
