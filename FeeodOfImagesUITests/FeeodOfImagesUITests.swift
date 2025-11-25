@@ -8,37 +8,6 @@ class Image_FeedUITests: XCTestCase {
         app.launch()
     }
     
-//    func testAuth() throws {
-//        let authenticateButton = app.buttons["Войти"]
-//        XCTAssertTrue(authenticateButton.waitForExistence(timeout: 5))
-//        authenticateButton.tap()
-//        
-//        let webView = app.webViews["UnsplashWebView"]
-//        XCTAssertTrue(webView.waitForExistence(timeout: 5))
-//        
-//        let loginTextField = webView.descendants(matching: .textField).element
-//        XCTAssertTrue(loginTextField.waitForExistence(timeout: 5))
-//        
-//        loginTextField.tap()
-//        loginTextField.typeText("KebichEvelina@yandex.by")
-//        webView.swipeUp()
-//        
-//        let passwordTextField = webView.descendants(matching: .secureTextField).element
-//        XCTAssertTrue(passwordTextField.waitForExistence(timeout: 5))
-//        
-//        passwordTextField.tap()
-//        passwordTextField.typeText("dinalina2005")
-//        webView.swipeUp()
-//        
-//        // Нажать кнопку логина
-//        webView.buttons["Login"].tap()
-//        
-//        // Подождать, пока открывается экран ленты
-//        let tablesQuery = app.tables
-//        let cell = tablesQuery.children(matching: .cell).element(boundBy: 0)
-//        XCTAssertTrue(cell.waitForExistence(timeout: 5))
-//    }
-    
     func testAuth() throws {
         let app = XCUIApplication()
         app.launch()
@@ -56,7 +25,7 @@ class Image_FeedUITests: XCTestCase {
         XCTAssertTrue(loginTextField.waitForExistence(timeout: 10))
         loginTextField.tap()
         sleep(2)
-        loginTextField.typeText("KebichEvelina@yandex.by")
+        loginTextField.typeText("...")
         
         // Переход к паролю
         webView.tap()
@@ -70,13 +39,13 @@ class Image_FeedUITests: XCTestCase {
         sleep(3)
         
         // Способ 1: Обычный ввод
-        passwordTextField.typeText("dinalina2005")
+        passwordTextField.typeText("..")
         sleep(1)
         
         // Проверяем, ввелось ли
-        if passwordTextField.value as? String != "dinalina2005" {
+        if passwordTextField.value as? String != "..." {
             // Способ 2: Через paste
-            UIPasteboard.general.string = "dinalina2005"
+            UIPasteboard.general.string = "..."
             passwordTextField.doubleTap()
             sleep(1)
             if app.menuItems["Paste"].waitForExistence(timeout: 2) {
@@ -107,8 +76,8 @@ class Image_FeedUITests: XCTestCase {
         
         let cellToLike = tablesQuery.children(matching: .cell).element(boundBy: 1)
         
-        cellToLike.buttons["like_button_off"].tap()
-        cellToLike.buttons["like_button_on"].tap()
+        cellToLike.buttons["like button off"].tap()
+        cellToLike.buttons["like button on"].tap()
         
         sleep(2)
         
@@ -122,10 +91,10 @@ class Image_FeedUITests: XCTestCase {
         // Zoom out
         image.pinch(withScale: 0.5, velocity: -1)
         
-        let navBackButtonWhiteButton = app.buttons["nav_back_button_white"]
+        let navBackButtonWhiteButton = app.buttons["nav back button white"]
         navBackButtonWhiteButton.tap()
     }
-    
+
     func testProfile() throws {
         sleep(3)
         app.tabBars.buttons.element(boundBy: 1).tap()
