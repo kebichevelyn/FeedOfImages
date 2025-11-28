@@ -29,8 +29,8 @@ final class ProfileViewController: UIViewController {
             self.loginName?.accessibilityIdentifier = "user login"
             self.descriptionLabel?.accessibilityIdentifier = "user bio"
             
-            self.nameLabel?.text = "Name Lastname"
-            self.loginName?.text = "@username"
+           // self.nameLabel?.text = "Name Lastname"
+           // self.loginName?.text = "@username"
         }
     }
     

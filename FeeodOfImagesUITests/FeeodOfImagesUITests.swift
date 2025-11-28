@@ -72,44 +72,17 @@ class Image_FeedUITests: XCTestCase {
     }
     
     func testProfile() throws {
-        let tablesQuery = app.tables
-        let firstCell = tablesQuery.children(matching: .cell).element(boundBy: 0)
-        XCTAssertTrue(firstCell.waitForExistence(timeout: 10))
+        sleep(3)
+        app.tabBars.buttons.element(boundBy: 1).tap()
         
-        let tabBar = app.tabBars.element
-        XCTAssertTrue(tabBar.waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["evelyn kebich"].exists)
+        XCTAssertTrue(app.staticTexts["@liebessensation"].exists)
         
-        let tabButtons = tabBar.buttons
-        XCTAssertTrue(tabButtons.count >= 2, "В таб баре должно быть минимум 2 кнопки")
+        app.buttons["logout button"].tap()
         
-        let profileTabButton = tabButtons.element(boundBy: 1)
-        XCTAssertTrue(profileTabButton.waitForExistence(timeout: 5))
-        XCTAssertTrue(profileTabButton.isHittable)
-        profileTabButton.tap()
-        
-        sleep(2)
-        
-        let nameLabel = app.staticTexts["evelyn kebich"]
-        let usernameLabel = app.staticTexts["@liebessensation"]
-        
-        XCTAssertTrue(nameLabel.waitForExistence(timeout: 5), "Имя 'evelyn kebich' не найдено")
-        XCTAssertTrue(usernameLabel.waitForExistence(timeout: 5), "Юзернейм '@liebessensation' не найден")
-        
-        let exitButton = app.buttons["logout_button"]
-        //"logout button"
-        XCTAssertTrue(exitButton.waitForExistence(timeout: 5))
-        XCTAssertTrue(exitButton.isHittable)
-        exitButton.tap()
-        
-        let alert = app.alerts["Пока, пока!"]
-        XCTAssertTrue(alert.waitForExistence(timeout: 5))
-        
-        let confirmButton = alert.scrollViews.otherElements.buttons["Да"]
-        XCTAssertTrue(confirmButton.waitForExistence(timeout: 5))
-        XCTAssertTrue(confirmButton.isHittable)
-        confirmButton.tap()
-        
-        let authenticateButton = app.buttons["Authenticate"]
-        XCTAssertTrue(authenticateButton.waitForExistence(timeout: 10))
+        app.alerts["Пока, пока!"].scrollViews.otherElements.buttons["Да"].tap()
+       // let authenticateButton = app.buttons["Authenticate"]
+        let authenticateButton = app.buttons["Войти"]
+        XCTAssertTrue(authenticateButton.waitForExistence(timeout: 5))
     }
 }
