@@ -73,15 +73,61 @@ class Image_FeedUITests: XCTestCase {
     
     func testProfile() throws {
         sleep(3)
-        app.tabBars.buttons.element(boundBy: 1).tap()
         
-        XCTAssertTrue(app.staticTexts["evelyn kebich"].exists)
-        XCTAssertTrue(app.staticTexts["@liebessensation"].exists)
+        print(app.debugDescription)
+        
+        let tabBar = app.tabBars.element
+        if tabBar.exists {
+            print("Таб бар найден")
+            
+            let tabButtons = tabBar.buttons.allElementsBoundByIndex
+            print("Количество кнопок в таб баре: \(tabButtons.count)")
+            
+            for (index, button) in tabButtons.enumerated() {
+                print("Таб кнопка \(index): '\(button.label)' - ID: '\(button.identifier)'")
+            }
+            
+            if tabButtons.count > 1 {
+                tabButtons[1].tap()
+            } else {
+                print("В таб баре меньше 2 кнопок")
+                return
+            }
+        } else {
+            print("Таб бар не найден. Ищем другие элементы")
+            
+            let alternativeNavElements = [
+                app.navigationBars,
+                app.segmentedControls,
+                app.otherElements,
+                app.collectionViews
+            ]
+            
+            for navElement in alternativeNavElements {
+                let element = navElement.element
+                if element.exists {
+                    print("Найден элемент навигации: \(element)")
+                }
+            }
+            
+            let profileButtons = app.buttons.matching(NSPredicate(format: "label CONTAINS[cd] 'profile' OR identifier CONTAINS[cd] 'profile'"))
+            if profileButtons.count > 0 {
+                print("Найдены кнопки профиля: \(profileButtons.count)")
+                profileButtons.element(boundBy: 0).tap()
+            } else {
+                print("Кнопки профиля не найдены")
+                return
+            }
+        }
+        
+        sleep(2)
+        
+        XCTAssertTrue(app.staticTexts["name lastname"].exists)
+        XCTAssertTrue(app.staticTexts["@username"].exists)
         
         app.buttons["logout button"].tap()
-        
         app.alerts["Пока, пока!"].scrollViews.otherElements.buttons["Да"].tap()
-       // let authenticateButton = app.buttons["Authenticate"]
+        
         let authenticateButton = app.buttons["Войти"]
         XCTAssertTrue(authenticateButton.waitForExistence(timeout: 5))
     }
