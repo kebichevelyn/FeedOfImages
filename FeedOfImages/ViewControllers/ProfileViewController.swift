@@ -1,63 +1,69 @@
 import UIKit
-import WebKit
 import Kingfisher
 
 final class ProfileViewController: UIViewController {
+    
+    // MARK: - UI Properties
     private var nameLabel: UILabel?
     private var loginName: UILabel?
     private var descriptionLabel: UILabel?
     private var avatarImage: UIImageView?
     private var logoutButton: UIButton?
-    private var profileInformation: [UIView] = []
     
-    private var profileImageServiceObserver: NSObjectProtocol?
+    // MARK: - Presenter
+    var presenter: ProfileViewPresenterProtocol?
     
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        view.backgroundColor = UIColor(named: "launchscreen + 1 screen")
-        
-        addViewsToScreen()
-        
-        if let profile = ProfileService.shared.profile {
-            updateProfileDetails(profile: profile)
-        }
-        
-        profileImageServiceObserver = NotificationCenter.default
-            .addObserver(
-                forName: ProfileImageService.didChangeNotification,
-                object: nil,
-                queue: .main
-            ) { [weak self] _ in
-                guard let self = self else { return }
-                self.updateAvatar()
-            }
-        updateAvatar()
+        setupView()
+        setupAccessibilityIdentifiers()
+        presenter?.viewDidLoad()
     }
     
-    // MARK: - private functions
+    private func setupAccessibilityIdentifiers() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            self.logoutButton?.accessibilityIdentifier = "logout button"
+            
+            self.nameLabel?.accessibilityIdentifier = "user name"
+            self.loginName?.accessibilityIdentifier = "user login"
+            self.descriptionLabel?.accessibilityIdentifier = "user bio"
+            
+           // self.nameLabel?.text = "Name Lastname"
+           // self.loginName?.text = "@username"
+        }
+    }
     
-    private func updateProfileDetails(profile: Profile) {
+    // MARK: - Actions
+    @objc private func didTapLogoutButton() {
+        presenter?.didTapLogoutButton()
+    }
+}
+
+// MARK: - ProfileViewControllerProtocol
+extension ProfileViewController: ProfileViewControllerProtocol {
+    func updateProfileDetails(profile: Profile) {
         nameLabel?.text = profile.name
         loginName?.text = profile.loginName
         descriptionLabel?.text = profile.bio
     }
     
-    private func updateAvatar() {
-        guard
-            let profileImageURL = ProfileImageService.shared.avatarURL,
-            let imageUrl = URL(string: profileImageURL),
-            let imageView = avatarImage
-        else { return }
+    func updateAvatar(with url: URL?) {
+        guard let imageView = avatarImage else { return }
         
         let placeholderImage = UIImage(systemName: "person.circle.fill")?
             .withTintColor(.lightGray, renderingMode: .alwaysOriginal)
             .withConfiguration(UIImage.SymbolConfiguration(pointSize: 70, weight: .regular, scale: .large))
         
+        guard let url = url else {
+            imageView.image = placeholderImage
+            return
+        }
+        
         let processor = RoundCornerImageProcessor(cornerRadius: 35)
         imageView.kf.indicatorType = .activity
         imageView.kf.setImage(
-            with: imageUrl,
+            with: url,
             placeholder: placeholderImage,
             options: [
                 .processor(processor),
@@ -74,8 +80,31 @@ final class ProfileViewController: UIViewController {
             }
     }
     
-    private func addViewsToScreen() {
+    func showLogoutConfirmation() {
+        let alert = UIAlertController(
+            title: "Пока, пока!",
+            message: "Уверены, что хотите выйти?",
+            preferredStyle: .alert
+        )
         
+        alert.addAction(UIAlertAction(title: "Да", style: .default) { [weak self] _ in
+            self?.presenter?.logout()
+        })
+        
+        alert.addAction(UIAlertAction(title: "Нет", style: .cancel))
+        
+        present(alert, animated: true)
+    }
+}
+
+// MARK: - UI Setup
+private extension ProfileViewController {
+    func setupView() {
+        view.backgroundColor = UIColor(named: "launchscreen + 1 screen")
+        addViewsToScreen()
+    }
+    
+    func addViewsToScreen() {
         let avatarImage = UIImageView(image: UIImage(resource: .avatar))
         let nameLabel = UILabel()
         let loginName = UILabel()
@@ -93,8 +122,6 @@ final class ProfileViewController: UIViewController {
         self.descriptionLabel = descriptionLabel
         self.avatarImage = avatarImage
         self.logoutButton = logoutButton
-        
-        profileInformation = [nameLabel, loginName, descriptionLabel, avatarImage]
         
         nameLabel.text = "Екатерина Новикова"
         nameLabel.textColor = .white
@@ -142,29 +169,5 @@ final class ProfileViewController: UIViewController {
             logoutButton.centerYAnchor.constraint(equalTo: avatarImage.centerYAnchor),
             logoutButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
         ])
-    }
-    
-    @objc private func didTapLogoutButton() {
-        showLogoutConfirmation()
-    }
-    
-    private func showLogoutConfirmation() {
-        let alert = UIAlertController(
-            title: "Пока, пока!",
-            message: "Уверены, что хотите выйти?",
-            preferredStyle: .alert
-        )
-        
-        alert.addAction(UIAlertAction(title: "Да", style: .default) { [weak self] _ in
-            self?.performLogout()
-        })
-        
-        alert.addAction(UIAlertAction(title: "Нет", style: .cancel))
-        
-        present(alert, animated: true)
-    }
-    
-    private func performLogout() {
-        ProfileLogoutService.shared.logout()
     }
 }

@@ -180,7 +180,7 @@ private extension ImagesListService {
     func makeRequest() -> URLRequest? {
         guard let token = OAuth2TokenStorage.shared.token else { return nil }
         guard
-            let url = URL(string: "\(Constants.defaultBaseURLGet)/photos?page=\(lastLoadedPage)")
+            let url = URL(string: "\(Constants.defaultBaseURL)/photos?page=\(lastLoadedPage)")
         else {
             return nil
         }
@@ -193,7 +193,7 @@ private extension ImagesListService {
         guard let token = OAuth2TokenStorage.shared.token else { return nil }
         
         let method = isLike ? "POST" : "DELETE"
-        guard let url = URL(string: "\(Constants.defaultBaseURLGet)/photos/\(photoId)/like") else {
+        guard let url = URL(string: "\(Constants.defaultBaseURL)/photos/\(photoId)/like") else {
             return nil
         }
         
